@@ -1,0 +1,93 @@
+\providecommand{\main}{..}
+\documentclass[\main/main.tex]{subfiles}
+
+\begin{document}
+
+
+\subsection{Matrices}
+Matrices are \lq\lq a rectangular array of numbers whose dimension is $m \times n$'' \citep{Bradley1977}. If $m = n$, the matrix is said to be \textit{square}. 
+Matrices will be represented by capital letters in bold (e.g. $\mathbf{P}$) with their entries in italic (e.g. $p_{ij}$ is the $(i,j)$ element of $\mathbf{P}$).\\
+If the matrix has a row-to-column orientation, $i$ indexes the row and $j$ the column (e.g. $p_{12}$ represents the entry in the first row, second column). Conversely, when the matrix has a column-to-row orientation, $i$ indexes the column and $j$ the row (e.g. $p_{12}$ represents the entry in the first column, second row).
+
+\noindent For instance:\\
+\begin{center}
+\begin{minipage}{.4\linewidth}
+\begin{equation*}
+\mathbf{P} =
+\begin{pmatrix}
+p_{11} & p_{12} & \cdots & p_{1n}\\
+p_{21} & p_{22} & \cdots & p_{2n}\\
+\vdots & & \vdots\\
+p_{m1} & p_{m2} & \cdots & p_{mn}\\
+\end{pmatrix}
+\end{equation*}
+\end{minipage}%
+\begin{minipage}{.4\linewidth}
+\begin{equation*}
+\mathbf{P} =
+\begin{pmatrix}
+p_{11} & p_{21} & \cdots & p_{n1}\\
+p_{12} & p_{22} & \cdots & p_{n2}\\
+\vdots & & \vdots\\
+p_{1m} & p_{2m} & \cdots & p_{nm}\\
+\end{pmatrix}
+\end{equation*}
+\end{minipage}
+   
+\end{center}
+
+
+\subsection{Vectors}
+Vectors are special cases of matrices with dimension $k \times 1$ . Vectors will be denoted by lowercase bold letters, e.g. $\mathbf{v}$.
+A k-dimensional vector $\mathbf{v}$ is defined as \lq\lq an ordered collection of k real numbers $v_1, v_2, . . . , v_k$'' \citep{Bradley1977}, and is written as:
+
+\begin{equation}
+\mathbf{v} =
+\begin{pmatrix}
+v_1\\
+v_2\\
+\vdots\\
+ v_k
+\end{pmatrix}
+\end{equation}
+Vectors are by default column vectors. To indicate horizontal vectors, we will use the transpose of $\mathbf{v}$, i.e.  $\mathbf{v}^T = ( v_1,v_2, \cdots, v_k)$.
+
+\subsection{Matrix multiplication}
+
+
+The product of an $m \times p$ matrix $\mathbf{A}$ and a $p\times n$ matrix $\mathbf{B}$ is defined to be \lq\lq a new $m \times p$  matrix $\mathbf{C}$, written $\mathbf{C}$ = $\mathbf{AB}$, whose elements $c_{ij}$ are given by'' \citep{Bradley1977AppliedProgramming}:
+\begin{equation}
+    c_{ij} = \sum_{k=1}^p a_{ik}b_{kj}
+\end{equation}\\
+
+\noindent For instance:
+\begin{equation*}
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1p}\\
+a_{21} & a_{22} & \cdots & a_{2p}\\
+\vdots & & \vdots\\
+a_{m1} & a_{m2} & \cdots & a_{mp}\\
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} & \cdots & b_{1n}\\
+b_{21} & b_{22} & \cdots & b_{2n}\\
+\vdots & & \vdots\\
+b_{p1} & b_{m2} & \cdots & b_{pn}\\
+\end{pmatrix}
+= 
+\end{equation*}
+\begin{equation*}
+\begin{pmatrix}
+c_{11} = a_{11}b_{11} + a_{12}b_{21} + ...+ a_{1p}b_{p1} &  & \cdots & \\
+ &  & \cdots & \\
+\vdots & & \vdots\\
+ &  & \cdots & \\
+\end{pmatrix}
+\end{equation*}
+
+\noindent Note that the product of two matrices is defined only if the number of columns of $\mathbf{A}$ is equal to the number of rows of $\mathbf{B}$. Morevoer, matrix multiplication is in general not commutative, i.e. $\mathbf{AB} \neq \mathbf{BA}$.
+
+
+
+
+\end{document}

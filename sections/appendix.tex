@@ -1,0 +1,361 @@
+\providecommand{\main}{..}
+\documentclass[\main/main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Appendix}
+
+\subfile{sections/random_variables}
+
+\subsubsection{Example: the toy-maker \citep{Howard1960}}\label{toy-maker1}
+
+Here below I will summarise an example of a discrete-time finite-state Markov chain by \cite{Howard1960}.\\
+
+\begin{small}
+Imagine there is a toy-maker that invents new toys. Once she produces a new puppet, she can be in two states: the public likes the new toy (state 1) or the public does not like it (state 2). The toy-maker is observed every week. i.e. she is observed at equally spaced epochs $n = 0, 1,2,..$.
+Assume that her being in a given state only depends on the previous state. For instance, when she is in state 1 in week $n$, she will either remain in the same state 1 with probability $\mathds{P} = 1/2$ or move to state 2 with $\mathds{P} = 1/2$ in week $n+1$  . Conversely, if she is in state 2 in week $n$, she will either remain in the same state 2 with probability $\mathds{P} = 3/5$ or move to state 1 with $\mathds{P} = 2/5$ in week $n+1$. This transition probabilities can be collected in the transition matrix:
+
+
+\begin{equation*}
+\mathbf{P} =
+\begin{pmatrix}
+\frac{1}{2} &  \frac{1}{2}\\
+\frac{2}{5} &  \frac{3}{5}\\
+\end{pmatrix}
+\end{equation*}
+Note that this matrix is row-stochastic and the row entries sums to 1.\\
+
+With this model, we can answer many questions, e.g. \lq\lq what is the probability that the toy-maker is in state 1 after $n$ weeks have passed, if she starts in state 1?\\
+
+In order to answer to this and other questions, it is useful to define $\pi_i(n)$ as the probability that the Markov chain is in state $i$ after $n$ transitions, given that the initial state $\pi_i(0)$ is known. It follows that:
+
+\begin{equation}
+    \sum_{i=1}^{N} \pi_i(n) = 1
+\end{equation}
+and 
+
+\begin{equation}
+    \pi_{ij}(n+1) = \sum_{i=1}^{N}\pi_i(n) p_{ij}
+\end{equation}
+
+\noindent Extending this idea, we can define a row vector $\bm{\pi}(n)$ that collects the state probabilities $\pi_i(n)$, so that:
+\begin{equation}
+   \bm{\pi }(n+1)= \bm{\pi}(n) \mathbf{P}
+\end{equation}
+where $\bm{\pi}(n) = \lbrack \bm{\pi_1}(n) \; \bm{\pi_2}(n) \; \cdots \bm{\pi_N}(n) \rbrack$ 
+
+\noindent By recursion:
+\begin{equation}
+\begin{split}
+   \bm{\pi}(1)&= \bm{\pi}(0) \bm{P} \\ 
+   \bm{\pi }(2)&= \bm{\pi}(1) \bm{P} = \bm{\pi}(0) \bm{P}^2 \\ 
+   \bm{\pi }(3)&= \bm{\pi}(2) \bm{P} = \bm{\pi}(0) \mathbf{P}^3\\
+\end{split}
+\end{equation}
+and in the general case:
+\begin{equation}
+\begin{split}
+   \bm{\pi}(n)&= \bm{\pi}(0) \mathbf{P}^n \\ 
+\end{split}
+\end{equation}
+To solve the previous case of the toy-maker with this set up, we can proceed as follows:
+\begin{enumerate}
+    \item The toy-maker starts in state 1, so $\pi_1(0) = 1$ and $\pi_2(0) = 0$\\
+    and $\bm{\pi}(0) = \begin{bmatrix}
+    \pi_1(0) & \pi_2(0)\\
+  \end{bmatrix}
+ = \begin{bmatrix}
+    1 & 0\\
+  \end{bmatrix}$
+
+    \item $\bm{\pi}(1) = \bm{\pi}(0) \; \mathbf{P} = 
+  \begin{bmatrix}
+    1 & 0\\
+  \end{bmatrix}
+ \; \;   \begin{bmatrix}
+1/2 & 1/2\\
+2/5 & 3/5\\
+  \end{bmatrix} = \begin{bmatrix}
+    1/2 & 1/2\\
+  \end{bmatrix}$
+  \item $\bm{\pi}(2) = \bm{\pi}(1) \; \mathbf{P} = 
+  \begin{bmatrix}
+    1/2 & 1/2\\
+  \end{bmatrix}
+ \; \;
+ \begin{bmatrix}
+    1/2 & 1/2\\
+    2/5 & 3/5\\
+  \end{bmatrix} = \begin{bmatrix}
+    9/20 & 11/20\\
+  \end{bmatrix}$
+\end{enumerate}
+and so on.\\
+
+\noindent As we compute $\bm{\pi}(n)$ as a function of $n$ we observe:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 &$\cdots$ \\ 
+  \hline
+ $\pi_1(n)$ & 1& 0.5& 0.45& 0.445& 0.4445&0.44445 \\ 
+ $\pi_2(n)$  & 0 & 0.5  & 0.55&0.555 &0.5555&0.55555\\ 
+\end{tabular}
+\end{center}
+it appears that $\pi_1(n)$ converges to $4/9$ and $\pi_2(n)$ to $5/9$ as $n$ increases. When the toy-maker starts being successful, she has a slightly bigger probability to be unsuccessful in the long run.  \\
+
+\noindent Considering the opposite situation, i.e. the toy-maker starts being unsuccessful, we have:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 &$\cdots$ \\ 
+  \hline
+ $\pi_1(n)$ & 0& 0.4& 0.44& 0.444& 0.4444&0.44444 \\ 
+ $\pi_2(n)$  & 1 & 0.6  & 0.66 &0.556 &0.5556&0.55556\\ 
+\end{tabular}
+\end{center}
+Again, we find that $\pi_1(n)$ converges to $4/9$ and $\pi_2(n)$ to $5/9$ as $n$ increases. In other words, the probability of being in a given state appears to be independent from the initial state, if $n$ is large. Any Markov chain that satisfies this property is said to be \textit{ergodic}. See \cite{Howard1960} (p.7) for further details about solving the system of linear equation to find the limiting state probabilities for any process.
+
+\end{small}
+
+
+
+\subsection{Derivation of formula \ref{moments}}
+
+Recall that the first, second, and third moments of lifetime rewards are given by:
+
+\begin{equation}
+    \begin{split}
+     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1) ^T\mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \\
+      \bm{\rho}^2(t+1) &= (\mathbf{P} \circ \mathbf{R}^2) ^ T\mathbf{1} + 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t) + 
+      \mathbf{P}^T \bm{\rho}^2(t) \\
+     \bm{\rho}^3(t+1) &= (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t) \\
+\end{split}
+\end{equation}for $t=0, ... ,T$ and with $\rho^1(0) = 0, \rho^2(0) = 0,\rho^3(0) = 0$.
+
+\textit{Compute the first moment:}\\
+
+Consider an individual who is in state $i$ at time $t$: she has still $t$ steps ahead until $T$.
+The individual makes a transition from state $i$ to state $j$, thus gaining a reward $r_{ij}$. After this transition, the individual will find herself in state $j$ and with $t-1$ steps remaining.\\
+
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+% draw horizontal line   
+\draw (-0.5,0) -- (12,0);
+% draw vertical lines
+\foreach \x in {0,2,4,6,8,10,12}
+\draw (\x cm,3pt) -- (\x cm,-3pt);
+% draw nodes
+\draw (12,0) node[below=3pt] {\small $t= 0$} node[above=3pt] {$   $};
+\draw (4,0) node[above=17pt] (1) {$X_t = i$} node[above=3pt] {};
+\draw (2,0) node[above=17pt] {} node[above=3pt] {};
+\draw (6,0) node[above=17pt]  (4) {$X_{t-1}=j$} node[above=3pt] {};
+
+\draw (8,0) node[above=17pt] {} node[above=3pt] {};
+\draw (10,0) node[above=17pt] {} node[above=3pt] {};
+\draw (12,0) node[above=17pt] {$T$} node[above=3pt] {};
+\draw (10,0) node[below=3pt] { \small $t= 1$} node[above=3pt] {};
+\draw (4,0) node[below=3pt] {\small $t = 4$} node[above=3pt] {};
+\draw (6,0) node[below=3pt] {\small $t= 3$} node[above=3pt] {$  $};
+\draw (5,2) node[below=3pt] {\small $r_{ij}$} node[above=3pt] {$  $};
+\draw (8,0) node[below=3pt] {$t=2$} node[above=3pt] {$  $};
+\draw [->] (1) to [out=30,in=150] (4) ;
+\end{tikzpicture}
+\caption{}
+\label{fig:}
+\end{figure}
+
+
+
+
+\noindent We can compute the expectation of rewards for such individual who starts in state $i$, conditioned on the fact that the individual moves from $i$ to $j$:
+    \begin{equation}
+        E[ \rho_i(t) | i \rightarrow j] = E[ r_{ij} + \rho_j(t-1) ]
+    \end{equation}
+From the conditional expectation, we can retrieve the unconditional expectation using a special case of the law of iterated expectations \citep{Grinstead1997}: \lq\lq Let X be a random variable with sample space $\Omega$. If the events $F_1, F_2, ..., F_n$ form a partion of the sample space, i.e $F_i \cap F_j = \emptyset \; \text{for} \; i \neq j$ and $\cup_i F_i = \Omega$, then:
+
+\begin{equation}
+\mathds{E} (X) = \sum_j E(X | F_j) P(F_j)
+\end{equation}
+see \cite{Grinstead1997} (p.240) for a proof and an example.\\
+
+
+
+\noindent In our notation, the unconditional expectation of $ \rho_i(t) $ becomes:
+    \begin{equation}\label{unconditional}
+    \begin{split}
+         E[ \rho_i(t)] &= \sum_{j=1}^N E[\rho_i(t) | i \rightarrow j] \; \mathds{P}( i \rightarrow j) = \\
+         &= \sum_{j=1}^N  E[\rho_i(t) | i \rightarrow j]\; p_{ij} =\\
+         &= \sum_{j=1}^N    E[ r_{ij} + \rho_j(t-1)]  p_{ij} = \\
+         &= \sum_{j=1}^N  \{  E[ r_{ij}] + E[\rho_j(t-1)]\}  p_{ij}
+    \end{split}
+    \end{equation}
+in matrix form, this becomes \citep{Caswell2011}:
+
+\begin{equation}
+        \bm{\rho}^1(t+1) = (\mathbf{P} \circ \mathbf{R}^1) \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \;\;\;\; t=0,..., T-1
+\end{equation}
+where $\circ$ represents the Hadamard (or element-by-element) product, $\mathbf{1}$ is a vector of ones and $\bm{\rho}^1(0) = 0$ is the initial condition.
+
+
+
+
+\subsubsection{Example}
+To give an intuition, imagine to have a very simple Markov process with two states $S=\{1,2\}$: the individual can start either in state 1 or 2 and then move to state 1 or 2. In order to compute the first moment, start by defining the vector$ \bm{\rho}^{(k)}$:
+
+\begin{equation}
+ \bm{\rho}^{(1)} =
+\begin{pmatrix}
+E[\rho^1_1]\\
+E[\rho^1_2]\\
+\end{pmatrix}
+\end{equation}
+and the matrix $\mathbf{R}_k$:
+
+\begin{equation}
+ \bm{R}^{(1)} =
+\begin{pmatrix}
+E[r_{11}] & E[r_{21}]\\
+E[r_{12}] & E[r_{22}]\\
+\end{pmatrix}
+\end{equation}
+
+\noindent Using the formula \ref{unconditional}, the expectation of rewards for an individual who starts in state 1 will be:
+
+\begin{equation}
+\begin{split}
+  \mathds{E}[\rho_1(t+1)] &= \sum_{j=1}^2 p_{1j}\{ \mathds{E}[r_{1j}] + \mathds{E}[\rho_j(t)] \}=  \\
+  &= p_{11}\{ \mathds{E}[r_{11}] + \mathds{E}[\rho_1(t)] \} + p_{12}\{ \mathds{E}[r_{12}] + \mathds{E}[\rho_2(t)] \}
+\end{split}
+\end{equation}
+Intuitively, the expectation of rewards for a process that starts in state 1 is equal to a weighted average with weights given by the transition probabilities. Indeed, if the process remains in state 1, it is expected to gain $\mathds{E}[r_{11}]$ plus $\mathds{E}[\rho_1(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 2. Similarly, if the process moves to state 2, it is expected to gain $\mathds{E}[r_{12}]$ plus $\mathds{E}[\rho_2(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 2.
+
+Using matrix notation, we are able to retrieve $\bm{\rho}(t+1)$, i.e. the vector of rewards that have to be accumulated at time $t+1$:
+
+\begin{equation}
+\begin{split}
+     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1)^T \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) 
+\end{split}
+\end{equation}
+
+\begin{equation}
+\setlength{\jot}{10pt}
+\begin{split}
+    \bm{\rho}^1(t+1) &= 
+\begin{bmatrix}
+      \mathds{E}[\rho_1^1(t+1)]\\
+      \mathds{E}[\rho_2^1(t+1)]\\
+\end{bmatrix}= \\
+&= \Bigg(
+\begin{bmatrix} 
+ p_{11}& p_{21}\\
+ p_{12}& p_{22}\\
+ \end{bmatrix} \circ
+ \begin{bmatrix} 
+ \mathds{E}[r_{11}] &  \mathds{E}[r_{21}] \\
+ \mathds{E}[r_{12}] &  \mathds{E}[r_{22}] \\
+ \end{bmatrix}
+ \Bigg) ^T
+ \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}& p_{12}\\
+ p_{21}& p_{22}\\
+ \end{bmatrix}
+ \begin{bmatrix}
+      \mathds{E}[\rho_1^1(t)]\\
+      \mathds{E}[\rho_2^1(t)]\\
+\end{bmatrix}= \\
+&= \Bigg( \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}] & p_{21}\mathds{E}[r_{21}\\
+ p_{12}\mathds{E}[r_{12}]& 
+ p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+  \Bigg) ^T
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &= 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}] & p_{12}\mathds{E}[r_{12}]\\
+ p_{21}\mathds{E}[r_{21} & 
+ p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}]\\
+ p_{21}\mathds{E}[r_{21}] + 
+ p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}] + p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)]\\
+ p_{21}\mathds{E}[r_{21}] + 
+ p_{22} \mathds{E}[r_{22}] + p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &=  
+ \begin{bmatrix} 
+ p_{11} \big\{ \mathds{E}[r_{11}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{12}\big\{ \mathds{E}[r_{12}]  + \mathds{E}[\rho_2^1(t)]\big\}\\
+  p_{21} \big\{ \mathds{E}[r_{21}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{22}\big\{ \mathds{E}[r_{22}]  + \mathds{E}[\rho_2^1(t)]\big\} \\
+ \end{bmatrix}
+\end{split}
+\end{equation}
+
+
+\noindent \textit{Compute the second moment:}\\
+\noindent The conditional second moment $\bm{\rho}^2$ of an individual in stage $i$, given a transition from $i$ to $j$, is given by: 
+
+\begin{equation}
+\begin{split}
+    \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] &= \mathds{E} \big\{ [ r_{ij} + \rho_j(t)]^2 \big\} =\\
+    &= \mathds{E} \big\{ [ r_{ij}^2 + \rho_j(t)^2 + 2 r_{ij} \rho_j(t)] \big\} =\\
+     &= \mathds{E} [ r_{ij}^2] +\mathds{E} [ \rho_j(t)^2] + 2 \mathds{E} [r_{ij}] \mathds{E} [\rho_j(t)]  =
+\end{split}
+\end{equation}
+since $r_{ij}$ and $\rho_j(t)$ are independent.\\
+
+\noindent The unconditional second moment is given by: 
+
+\begin{equation}
+\begin{split}
+\mathds{E} [\bm{\rho}_i^2 (t+1)] &= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] \mathds{P}(i\rightarrow j) =\\
+&= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] p_{ij} =\\
+\end{split}
+\end{equation}
+
+\subsection{\color{red}check}
+The combination of the assumptions that P has the structure (3) and that $r_{i,s+1} =0$  for all i means that every individual will eventually be absorbed in a state in which future rewards are zero; thus $\rho^1(t)$ will converge to a limit as $T\rightarrow \infty$; this limit is the expectation of lifetime rewards calculated over the entire lifetime of every individual. See the section Discussion for discounting necessary to calculate asymptotic rewards in ergodic Markov chains, when this eventual end to accumulation does not hold. \citep{Caswell2018}
+
+
+
+\end{document}

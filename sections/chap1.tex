@@ -1,0 +1,99 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\begin{document}
+\subsection{Matrix approach to the analysis of healthy longevity}
+
+Matrix population models were introduced in the 1940's and are mainly associated to the work of \citet{Leslie1945, Leslie1948}. These models were largely neglected by human demographers for more than a decade until the demographic community rediscovered the method in the mid-1960's - see for instance \cite{Keyfitz1964} and \cite{Rogers1966}. A later impulse to the method was given by the increasing computing power of matrix-oriented programming languages, such as MATLAB or R, which made the calculation of the matrix simple and efficient. 
+
+Matrix population models are typically classified into stage-classified or age-classified models. The former are widely used for plant and animal demography where the population dynamics depend more on the development stage than the age of individuals. The latter focus instead on vital rates that differ among individuals depending on their age. In this work, I will focus on a model for an age-classified population.
+
+Age is treated as set of \textit{age classes}: individuals aged \textit{x} with $i-1 \leq x < i$ will belong to the age class  \textit{i}. In this notation the first age class is coded as 1 and includes individuals aged 0-1.
+Note that  modelling age as a discrete variable corresponds to implicitly assume that the information on the age of individuals within the same age class is not relevant \citep{Keyfitz2005}. 
+
+$P_i$ represents the probability that an individual that belongs to age class $i$ will survive from $t$ to $t+1$. To ease the computation, the unit of time is the same as the age class width, i.e one year in this case.
+The parameters that characterise an age-classified matrix model can be computed from a standard life table. When age is treated as a continuous variable, the survival probability from age $x$ to age $x+1$ can be determined as:
+\begin{equation}
+    \frac{l(x+1)}{l(x)}
+\end{equation}
+
+\noindent where $l(x)$ represents the probability of surviving up to age $x$.
+
+
+\noindent When dealing with discrete age classes, $l(x)$ can be instead approximated by the average over the one-year interval as:
+\begin{equation}
+    P_i = \frac{\int_{i}^{i+1} l(x) dx}{\int_{i-1}^{i} l(x) dx}
+\end{equation}
+
+\subsection{Mortality comparison}
+When looking at mortality data of different countries the most common strategy is to direct standardise the data: one country is taken as a reference and deaths in the other countries are adjusted as if they all had the same age distribution of the population of reference.
+
+\subsubsection{Standardised rates}
+\cite{Kitagawa1964} provides a systematic exposition of common techniques for controlling population composition. Rates are one of the most common measures in demography and typically refer to the ratio of \lq\lq the number of occurrence of an event'' to the \lq\lq population exposed to the event''. Using Kitagawa's notation:
+\begin{equation}
+    c = \frac{e}{n}
+\end{equation}
+where $c$ is the rate, $e$ the number of events, and $n$ the exposed population.
+
+The general rate in a  population can also be thought as a weighted average of rates in subgroups weighted by population composition:
+\begin{equation}
+    c = \frac{\sum  c_i n_i}{n} = \frac{\sum n_i}{n} c_i
+\end{equation}
+where $c_i$ represents the specific rate for the $i^{th}$ subgroup and $n_i$ the number of individuals. For instance, the crude death rate in a given population can be computed either dividing the number of occurrence (i.e. the deaths) by the total population or, equivalently, multiplying the age-specific death rates by the age composition of the general population. 
+
+There exists a direct and indirect method to standardise a rate.
+The direct method allows to control for differences in population composition by exploting information on both the group-specific rates of each population and the compositional structure of a reference population. Conversely, the indirect method can be used when there are data on the compositional structure of the populations to be compared but no 
+information on the the group-specific rates. In this setting, I will focus on the direct method, see \cite{Kitagawa1964} for further details on how to compute indirect standardisation.
+
+\subsubsection{Direct standardisation}
+
+The direct method selects a reference population and then applies its compositional structure to the rates of the other population. In formula:
+\begin{equation}
+    I- std. rate (direct) = \frac{\sum N_i c_i}{N}
+\end{equation}
+where $N_i$ refers to the number of individuals in the $i^{th}$ subgroup of the population taken as a standard, $c_i$ is the rate of the comparison population, and $N$ is the total number of individuals in the standard population.
+The standardisation can be made over any trait or characteristic of the population one wishes to control for. A typical example is choosing age in order to control for the age composition of different populations. The idea can also be extended to two or more triats:
+\begin{equation}
+    IJ -  std. rate (direct) = \frac{\sum_{i}\sum_{j} N_{ij} c_{ij}}{N}
+\end{equation}
+where individuals are categorised according to the two traits $I$ and $J$.
+
+It is important to note that after standardisation rates can no longer be interpreted in absolute terms (they lose their intrinsic value) but are useful to effect comparisons of the group-specific rates among  populations. In other words, we are looking at \lq\lq hypothetical'' populations which present their specific group-rates and population composition of the standard population. 
+
+
+\subsubsection{Standardisation of mortality rates}
+
+Suppose we wish to compare the mortality rates of male and female subgroups in a given population. As mentioned above, it is necessary to apply some form of standardisation. Two viable strategies will be to standardise either by group composition or by group deaths.
+
+Let $p^m_x$ be the number of male aged $x$ and $p^f_x$ the number of female aged $x$ in a given population. Define $\mu^m_x$ and $\mu^f_x$ as the male and female death rate. The relative mortality at age $x$ will be:
+\begin{equation}
+    \frac{\mu^m_x}{\mu^f_x}
+\end{equation}
+Standardising by male or female population we will obtain:
+\begin{equation}
+    I^m_p = \frac{\sum_{x}p^m_x (\mu^m_x / \mu^f_x)}{\sum_{x} p^m_x}
+\end{equation}
+\begin{equation}
+    I^f_p = \frac{\sum_{x}p^f_x (\mu^m_x / \mu^f_x)}{\sum_{x} p^f_x}
+\end{equation}
+While weighting by male or female deaths results in:
+\begin{equation}
+    I^m_d = \frac{\sum_{x}p^m_x \mu^m_x (\mu^m_x / \mu^f_x)}{\sum_{x} p^m_x \mu^m_x}
+\end{equation}
+
+\begin{equation}
+    I^f_d = \frac{\sum_{x}p^f_x \mu^f_x (\mu^m_x / \mu^f_x)}{\sum_{x} p^f_x \mu^f_x} = \frac{\sum_{x}p^f_x \mu^m_x}{\sum_{x} p^f_x \mu^f_x}
+\end{equation}
+$I^f_d$ or  $I^m_d$ are also called \lq\lq aggregative index'' as they are defined by the ratio of two weighted averages: the weighted average of the specific rates of the population to be compared (weighted by the composition of the population taken as reference) at the numerator and the weighted average of the standard population rates (weighted by the same standard composition) at the denominator.
+\cite{Keyfitz2005} argue that \lq\lq especially for low-mortality countries weighting by population gives a much higher excess mortality of males than weighting by deaths. The reason is that deaths are relatively heavier than population at the oldest ages, where the age-specific rates of females approach those of males''. This is the reason why in this setting I consider weighting by deaths rather than by population.
+
+
+
+
+
+
+
+
+\bibliography{mendeley}
+
+\end{document}

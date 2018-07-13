@@ -1,0 +1,80 @@
+\providecommand{\main}{..}
+\documentclass[\main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{Set up of the model}
+\subsection{A discrete-time, finite-state, and absorbing\\ Markov Chain model}
+
+The demographic model underlying this analysis is a Markov chain $\{X_0, X_1, ...\}$ characterised by:
+\begin{enumerate}
+\item discrete-time (i.e. $T = \{ 0,1,2,..\}$);
+\item at least one absorbing state which can be reached in a finite number of steps \citep{Grinstead1997};
+\item a finite set of discrete and mutually exclusive spaces $S = \{s_1, s_2, ..., s\}$.
+\end{enumerate}
+The model applies a discrete time framework because the data are presented in discrete time, i.e. with a scanning that occurs nearly every two years. This does not mean that transitions can occur only at integer time, but it is due to the form in which that data are presented \citep{haberman1999}.
+
+
+By \textit{absorbing state} we mean a state that, once entered, cannot be left (e.g. death). Conversely, a state that can be left is called \textit{transient}.
+In demography, Markov chain models have been extensively used to represent transitions among life cycle states that end with death - see, for instance, \cite{Caswell2001, Caswell2006, Caswell2009}, \cite{Fujiwara2002}, and \cite{Cochran1992}.
+Let us call $\tau$ the number of the transient states and $\alpha$ the number of absorbing states, so that the total number of state is given by: $s = \tau + \alpha$ \citep{VanDaalen2017}.
+In one possible formulation, the transient states are the age classes, numbered $1,..., s$ and the only absorbing state $s+1$ is death \citep{Caswell2018}. 
+Assuming there are $s$ states, the transition matrix of the Markov chain becomes:
+
+
+\begin{equation}
+    \mathbf{P} = \begin{pmatrix}
+        \mathbf{U} &  \mathbf{0}\\
+    \mathbf{m}^T& 1
+    \end{pmatrix}
+\end{equation}
+where $ \mathbf{m}^T$ is the transpose (i.e. a row vector) of the column vector $\mathbf{m}$ that collects the mortality rates, with $m_{ij} = 1 - \sum_{j} u_{ij}$. $\mathbf{U}$ is the transient matrix that collects the transition probabilities from one age class to the next. For example, considering three age classes, i.e. $s = 3$, $\mathbf{U}$ might be:
+
+\begin{equation}
+    \mathbf{U}= \begin{pmatrix}
+    0 & 0 & 0\\
+    u_{12} & 0 & 0\\
+0 & u_{23} & u_{33}\\
+    \end{pmatrix}
+\end{equation}
+where $ u_{12}$ represents the probability of moving from age class 1 to age class 2, $ u_{23}$ from age class 2 to age class 3, and $ u_{33}$ the probability of remaining in age class 3.\\
+
+\noindent The corresponding matrix $\mathbf{P}$ will be:
+\begin{equation}
+    \mathbf{P}= \begin{pmatrix}
+    0 & 0 & 0 & 0\\
+    u_{12} & 0 & 0& 0\\
+0 & u_{23} & u_{33}& 0\\
+m_{14} & m_{24} & m_{34}& 1\\
+    \end{pmatrix}
+\end{equation}
+with dimensions:
+\begin{equation}
+\begin{pmatrix}
+    (s \times s) &  (s \times 1)\\
+    (1 \times s) & (1 \times 1)
+\end{pmatrix}
+\end{equation}
+
+\noindent Note that the matrices have a column-to-row orientation and that the stochastic matrix $\mathbf{P}$ is column-stochastic, i.e. it is a square matrix with the entries in each of its columns that add up to 1 \citep{Poole1995}. Moreover, it is assumed that the dominant eigenvalue of $\mathbf{U}$ is less than one so that any individual starting in any transient state will eventually be absorbed (i.e. die) with probability 1 \citep{Caswell2011}.
+
+The same model could be extended by including more absorbing states, e.g. different causes of death:
+\begin{equation}\label{matrixmodel}
+    \mathbf{P} = \begin{pmatrix}
+        \mathbf{U} &  0\\
+    \mathbf{M}& \mathbf{I}
+    \end{pmatrix}
+\end{equation}
+by replacing the vector $\mathbf{m}$ with the matrix $\mathbf{M}$.
+
+\noindent
+In the following analysis, I will consider a matrix of mortality $\mathbf{M}$ of dimension $2 \times s$, where the two rows represent the probability of dying from a healthy or unhealthy condition, respectively. This is useful to compute healthy longevity \citep{Caswell2018a}
+
+
+
+
+
+
+
+\end{document}

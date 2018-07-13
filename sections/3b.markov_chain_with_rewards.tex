@@ -1,0 +1,344 @@
+\providecommand{\main}{..}
+\documentclass[\main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\subsection{Markov chain with rewards}
+
+Markov chains with rewards were introduced by \cite{Howard1960} to analyse decisions in Markovian sequential processes. In Howard's framework, rewards are deterministic quantities. In the 1980's this idea was generalised by \cite{Benito1982} who introduced the concept of random rewards and provided the formula to compute the first and second moments, i.e. expected value and variance \footnote{ From \cite{Karlin1975}: The $m^{th}$ moment of a continuous random variable $X$ with probability function $p(\cdot)$ is given by:
+\begin{equation}
+    \mathds{E}(X^m) = \int_{-\infty}^{\infty} x^m p(x) dx
+\end{equation}
+The first moment of $X$ is typically called the mean and denoted by $\mu_x$:
+\begin{equation}
+    \mathds{E}(X) = \mu_x = \int_{-\infty}^{\infty} x p(x) dx
+\end{equation}
+The variance of $X$ is defined as the second central moment of $X$ and it is typically denoted by $\sigma^2$:
+\begin{equation}
+    \sigma^2 = \mathds{E}(X^2) - \mu_x
+\end{equation}
+}.
+The knowledge of the variance of the random variables is very useful if we want to include an estimate of risk in the optimisation process \citep{Benito1982} or to decompose the observed variance in individuals' characteristics into the two possible sources: individual stochasticity (i.e. the random variation that results from the accumulation of the random outcomes of lifetime stochastic processes) or genuine heterogeneity among individuals (i.e. differences in individuals' properties) \citep{Hartemink2017a, Caswell2011}.
+It is important to distinguish among the two concepts because the observed variance among individuals could simply be lead by individual stochasticity, with individuals experiencing the same demographic rates or being totally identical \citep{VanDaalen2017}.
+
+
+
+Since their introduction, Markov chain with rewards have been extensively investigated - see, among others, \cite{Howard1960}, \cite{Puterman1994}, and \cite{Sheskin2010}. These mathetical model have been used to study income or cost accumulated over the lifetime. More recently, they have been applied to population biology to study lifetime reproduction $R_0$ \citep{Caswell2011, VanDaalen2015, VanDaalen2017} and other properties of individuals. 
+
+\subsubsection{Main concepts and definitions}
+I will explore the case of a discrete-time and finite-state Markov process with rewards. The main ideas and terminology are taken from \cite{Howard1960} and \cite{Caswell2011}.\\
+
+\noindent Imagine to deal with an N-state Markov chain where a reward $r_{ij}$ is accumulated each time the process makes a transition from state $i$ to state $j$. The rewards may be dollars, units of production, or any other output of interest, e.g. the production of children \citep{Caswell2011, vanDaalen2015, vanDaalen2017} or years of healthy life \citep{Caswell2018}.
+
+In the latter case, the idea of \lq\lq reward'' is the following: each individual moves through the life cycle and, at each step, collects a reward: this can either be a \lq\lq year of healthy life'', if the individual moves from one age class to the next without developing any functional limitation, or a \lq\lq year of disabled life'', if some activities are instead limited \citep{Caswell2018}. When modelling healthy life expectancy, rewards might be thought as being all positive. In other settings (e.g. when dealing with lifetime income or costs) it might be more appropriate to introduce negative rewards.
+
+
+
+\subsubsection{Statistical properties of rewards}
+
+Since rewards are modelled as random variables, we can look at various statistical properties, such as their mean value, variance, coefficient of variation and skewness \citep{Caswell2018}.
+
+\cite{Caswell2011} provides a set of recurrence relations for computing the $k^{th}$ moment of lifetime rewards. I will follow his approach and refer to his formulas. See instead \cite{vanDaalen2015, vanDaalen2017}  for an exact solution.\\
+
+\noindent Begin by calling  $\bm{\rho}^k$ the vector that collects the $k^{th}$ moments of the rewards accumulated over the lifetime as a function of the initial state of the individual:
+
+\begin{equation}
+ \bm{\rho}^{k} =
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+\vdots\\
+E[\rho^k_{s+1}]
+\end{bmatrix}
+\end{equation}
+Note that the vector $\bm{\rho}^k$ has dimension $(s+1) \times 1$ since an individual could start in any of the state belonging to the state space $S = \{1,2,..., s+1\}$. Moreover, the superscript refers to the $k^{th}$ order of the moment while the subscript refers to the entry of the vector. \\
+The moments of all $r_{ij}$ are instead collected in a series of reward matrices. For instance, the matrix of the $k^{th}$ moment of the rewards $r_{ij}$ will be denoted as $\mathbf{R}^k$ and be of the form:
+
+\begin{equation}
+ \bm{R}^{k} = 
+ \begin{bmatrix}
+  E[r^k_{11}]  &  E[r^k_{21}]  & \cdots &  E[r^k_{(s+1)1}] \\
+E[r^k_{12}]  &  E[r^k_{22}]  & \cdots &  E[r^k_{(s+1)2}] \\
+\vdots & & &\\
+  E[r^k_{1(s+1)}]  &  E[r^k_{2(s+1)}]  & \cdots &  E[r^k_{(s+1)(s+1)}] \\
+ \end{bmatrix}
+\end{equation}
+\\
+
+\noindent It is assumed that rewards accumulate over the lifetime and stop when the individual dies. In the context of healthy life expectancy, this is done since dead individuals  can no longer accumulate any year of healthy or unhealthy life. Moreover, both the rewards and the trajectory taken by an individual are random variables, and so are the total accumulated rewards \citep{Caswell2011}.\\
+Since rewards are not accumulated in state $s+1$, we can shift our focus from the whole vector $\bm{\rho}^k$ to a subvector $\Tilde{\bm{\rho}}^k$:
+
+\begin{equation}
+\Tilde{\bm{\rho}}^k =
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+\vdots\\
+E[\rho^k_{s}]
+\end{bmatrix}
+\end{equation}
+$\Tilde{\bm{\rho}}^k$ can be obtain from $\bm{\rho}^k$ simply by pre-multiplying the original vector by a matrix $\mathbf{Z}$: 
+
+\begin{equation}
+    \Tilde{\bm{\rho}}^k = \mathbf{Z}\bm{\rho}^k
+\end{equation}
+where $\mathbf{Z}$ is given by:
+
+\begin{equation}
+\mathbf{Z}=
+    \begin{bmatrix}
+    \mathbf{I} | \mathbf{0}
+    \end{bmatrix}
+\end{equation}
+where $\mathbf{I}$ is the identity matrix (i.e. a square matrix that has its entries on the main diagonal equal ones  and zeros elsewhere)  of dimension $(s \times s) $ and $\mathbf{0}$ is a matrix of zeros of dimension $(s \times 1) $. \\ 
+
+\noindent For instance, if $s = 3$,  $\bm{\rho}^k$ will be:
+
+\begin{equation}
+\bm{\rho}^k =
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+E[\rho^k_{4}]\\
+\end{bmatrix}
+\end{equation}
+and $\mathbf{Z}$:
+
+\begin{equation}
+\mathbf{Z}=
+    \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+\end{equation}
+so that:
+
+\begin{equation}
+\Tilde{\bm{\rho}}^k =
+    \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+    \begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+E[\rho^k_{4}]\\
+\end{bmatrix} = 
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+\end{bmatrix}
+\end{equation}
+
+
+
+
+$\bm{r}$ that collects the accumulated rewards over the lifetime of an individual, as a function of her initial state:
+\begin{equation}
+ \bm{r} =
+\begin{pmatrix}
+r_1\\
+r_2\\
+\vdots\\
+r_{s+1}
+\end{pmatrix}
+\end{equation}
+The subscript represents the initial state of the individual (check).\\
+Then, let
+
+
+
+\subsubsection{Backward solution}
+In order to compute the total accumulated rewards, we can proceed in a \lq\lq backward fashion'' \citep{Caswell2011, Howard1960}: 
+\begin{enumerate}
+    \item define $T$ as the final time and $t$ as the time remaining until $T$;
+    \item let  $\bm{\rho}(t) $ be the vector of rewards that still have to be accumulated at time $t$: $\bm{\rho}(t)^T = [\bm{\rho}_1(t), \bm{\rho}_2(t), \cdots, \bm{\rho}_{s+1}(t)] $.\\ At $T$, $\bm{\rho}(t) = \bm{\rho}(0) $  meaning that no additional rewards will to be collected;
+\end{enumerate}   
+
+\subsubsection{Computing moments of lifetime rewards}
+
+\cite{Caswell2011} provides the formula for calculating the $m^{th}$ moments of accumulated rewards: \lq\lq Let $\mathbf{P}$ be the transition matrix of the Markov
+chain, let $\mathbf{R}^k$ be the matrix of $k^{th}$ moments of the transition-specific rewards, and let $T$ denote the terminal time. The first three moments of the accumulated reward satisfy: 
+\begin{equation}
+    \begin{split}
+     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1) ^T\mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \\
+      \bm{\rho}^2(t+1) &= (\mathbf{P} \circ \mathbf{R}^2) ^ T\mathbf{1} + 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t) + 
+      \mathbf{P}^T \bm{\rho}^2(t) \\
+     \bm{\rho}^3(t+1) &= (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t) \\
+\end{split}
+\end{equation}for $t=0, ... ,T$ and with $\rho^1(0) = 0, \rho^2(0) = 0,\rho^3(0) = 0$.
+From this set of recurrences, the formula for the $m^{th}$ moment is given by:
+
+\begin{equation}\label{moments}
+    \bm{\rho}^m(t+1) = \sum_{k=0}^{m} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \rho^k(t)
+\end{equation}
+with $\rho^m(0)=0$ ". See the Appendix for the derivation. 
+
+
+
+
+
+Rewards are random variables with specified moments. By transitioning from state to state, the Markov chain generates a sequence of rewards. The moments of each reward can be collected in a series of reward matrices \citep{Caswell2018}. For instance, the reward matrix $\mathbf{R}_k$ collects all the $k^{th}$ moments of the rewards:
+\begin{equation}
+\mathbf{R}_k = \big( E[r^k_{ij}] \big)
+\end{equation}
+when modelling healthy longevity, it is useful to center all the moments around zero and to assume that rewards accumulated over time and stops at death \citep{Caswell2018}.\\
+
+One question we might want to ask is what is the expected reward after $n$ transition. In order to answer to this question, it is useful to define a new variable $v_i(n)$ that represents the expected total rewards in the next $n$ transitions with a Markov chain starting in state $i$:
+
+\begin{equation}\label{rewards}
+    v_i(n) = \sum_{j=1}^N p_{ij} [ r_{ij} + v_j(n-1) ] \; \;\;\; i = 1,2,...,N \;\;\;\; n=1,2,...
+\end{equation}
+we could picture this as:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+% draw horizontal line   
+\draw (-0.5,0) -- (9,0);
+% draw vertical lines
+\foreach \x in {0,2,4,6,8}
+\draw (\x cm,15pt) -- (\x cm,-3pt);
+% draw nodes
+\draw (0,0) node[below=3pt] {\small $n= 0$} node[above=3pt] {$   $};
+\draw (0,0) node[above=17pt]  {$X_0 = i$} node[above=3pt] {};
+\draw (2,0) node[above=17pt] {} node[above=3pt] {};
+\draw (4,1) node[above=17pt] (1) {$v_j(2)$} node[above=3pt] {};
+\draw (6,1) node[above=17pt] (4) {$v_i(3)$} node[above=3pt] {};
+\draw (6,0) node[above=17pt]  {$X_3=j$} node[above=3pt] {};
+\draw (8,0) node[above=17pt] {$...$} node[above=3pt] {};
+\draw (2,0) node[below=3pt] { \small $n= 1$} node[above=3pt] {};
+\draw (4,0) node[below=3pt] {\small $n= 2$} node[above=3pt] {};
+\draw (6,0) node[below=3pt] {\small $n= 3$} node[above=3pt] {$  $};
+\draw (5,3) node[below=3pt] {\small $p_{ij}$} node[above=3pt] {$  $};
+\draw (8,0) node[below=3pt] {$...$} node[above=3pt] {$  $};
+\draw [->] (1) to [out=30,in=150] (4) ;
+\end{tikzpicture}
+\caption{Rewards}
+\label{fig:markov_chain}
+\end{figure}
+
+\noindent The expected total rewards after $n$ steps, when the Markov chain starts from state $i$ and ends in any state $j$, can be thought as the reward $r_{ij}$ that the system gains while moving from state $i$ to state $j$ plus the expected gain until $n-1$ that the system would realise if it had started in state $j$. Note that we are summing each possible state $j = 1,2, ...N$, i.e. including state $i$. These earnings must then be weigthed by their respective probability $p_{ij}$ (check).\\
+
+\noindent Expanding the summation, equation \ref{rewards} can be written as:
+\begin{equation}
+   v_i(n) = \sum_{j=1}^N p_{ij}r_{ij} +  \sum_{j=1}^N p_{ij}v_j(n-1) \;\;\;\; i=1,2,...,N \;\;\;\; n=1,2,3,...
+\end{equation}
+defining $q_i =  \sum_{j=1}^N p_{ij}r_{ij}$, we have:
+\begin{equation}
+   v_i(n) = q_i +  \sum_{j=1}^N p_{ij}v_j(n-1) \;\;\;\; i=1,2,...,N \;\;\;\; n=1,2,3,..
+\end{equation}
+$q_i$ can be thought as the reward expected from a process that starts in state $i$ and moves by one step. It is also called \textit{expected immediate reward} for state $i$. 
+In vector form, we have:
+\begin{equation}
+   \mathbf{v}(n) = \mathbf{q} +  \mathbf{P}\mathbf{v}(n-1)\;\;\;\; n=1,2,3,..
+\end{equation}
+where $ \mathbf{v}(n)$ is called the \textit{total-value} vector and has entries $ v_i(n)$ for $i=1,2,...,N$ and $ \mathbf{q}$ is the vector of expected immediate rewards with entries $q_i$   for $i=1,2,...,N$.
+
+
+
+\subsubsection{Example, con't: the toy-maker \citep{Howard1960}}
+
+The following is taken from \cite{Howard1960} p.19:
+
+
+\begin{small}
+Let us add a reward structure to the toy-maker problem investigated in section \ref{toy-maker1}, for instance:
+\begin{enumerate}
+    \item if the process starts in state 1 and transits to state 1 in the next period, the reward is equal to 9 dollars
+     \item if the process starts in state 2 and transits to state 2 in the next period, the reward is equal to -7 dollars
+      \item if the process starts in state 1(2) and transits to state 2(1) in the next period, the reward is equal to 3 dollars
+\end{enumerate}
+The different rewards can be collected in a reward matrix $\mathbf{R}$.
+\begin{equation}
+\mathbf{R} = 
+\begin{bmatrix}
+r_{11} & r_{12}\\
+r_{21} & r_{22}\\
+\end{bmatrix} =
+\begin{bmatrix}
+9 & 3\\
+3 & -7\\
+\end{bmatrix}
+\end{equation}
+From section \ref{toy-maker1} we have:
+\begin{equation}
+\mathbf{P} = 
+\begin{bmatrix}
+0.5 & 0.5\\
+0.4 & 0.6\\
+\end{bmatrix}
+\end{equation}
+and so we can find the vector of expected immediate rewards:
+\begin{equation}
+    \mathbf{q} = 
+    \begin{bmatrix}
+    q_1\\
+    q_2
+    \end{bmatrix} =
+    \begin{bmatrix}
+    \sum_{j=1}^N p_{1j}r_{1j} = p_{11}r_{11} + p_{12}r_{12}\\
+    \sum_{j=1}^N p_{2j}r_{2j} = p_{21}r_{21} + p_{22}r_{22}\\
+    \end{bmatrix}=
+     \begin{bmatrix}
+    0.5*9 + 0.5*3\\
+    0.4*3 - 0.6*7
+    \end{bmatrix}=
+     \begin{bmatrix}
+    6\\
+    -3
+    \end{bmatrix}
+\end{equation}
+the vector $\mathbf{q}$ tells us that the toy-maker expects to make 6 dollars the next week if she starts with a successful toy while she expects a loss of 3 dollars, if she starts with an unsuccessful one.\\
+
+\noindent From this we can compute $v_i(n)$ as a function of n. Recall:
+
+\begin{equation}
+    v_i(n) = q_i + \sum_{j=1}^N p_{ij}v_j(n-1) 
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+     v_1(0) &= 0\\ 
+     v_2(0) &= 0 
+\end{split}
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+     v_1(1) &= q_1 + (p_{11}v_1(0) +p_{12}v_2(0) = 6  \\ 
+     v_2(1) &= q_2 + (p_{21}v_1(0) +p_{22}v_2(0) = -3
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+     v_1(2) &= q_1 + (p_{11}v_1(1) +p_{12}v_2(1) = 7.5  \\ 
+     v_2(2) &= q_2 + (p_{21}v_1(1) +p_{22}v_2(1) = -2.4
+\end{split}
+\end{equation}
+
+\noindent As we continue computing the recursive formula, we obtain the following:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 & \\ 
+ \hline
+ $v_1(n)$ & 0& 6& 7.5& 8.55& 9.555&10.5555 \\ 
+ $v_2(n)$  & 0 & -3  & -2.4 & -1.44 &-0.444 & 0.5556\\ 
+\end{tabular}
+\end{center}
+
+The asymptotic behaviour of the process suggests that having a successful toy is worth 10 dollars more than having an unsuccessful product, since $v_1(n) - v_2(n)$ approaches 10 as $n$ increases. Moreover, an additional week seems to increase profit by  1 dollar in each case: both $v_1(n) - v_1(n-1)$ and $v_2(n) - v_2(n-1)$ approach 1. For instance, after 5 weeks the toy-maker expects to make 10.5 dollars of profit if she now has a successful toy and 0.5 dollars if she instead has an unsuccessful one.
+\end{small}
+
+
+\end{document}
