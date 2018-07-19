@@ -5,6 +5,829 @@
 
 \chapter{Appendix}
 
+\section{Iterative approximation for the $m^{th}$ moments of lifetime rewards}\label{sec:recursive_moment}
+\subsection{Derivation of the first moment}
+
+The following reasoning explains the main results of Caswell's derivation. For the original explanation, see \cite{Caswell2011}.\\
+
+Consider an individual who is in state $i$ at time $t$ and has still $t$ steps ahead until $T$.
+Assume that the individual makes a transition from state $i$ to state $j$, thus gaining a reward $r_{ij}$. After this transition, the individual will find herself in state $j$ and with $t-1$ steps remaining.\\
+
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+% draw horizontal line   
+\draw (-0.5,0) -- (12,0);
+% draw vertical lines
+\foreach \x in {0,2,4,6,8,10,12}
+\draw (\x cm,3pt) -- (\x cm,-3pt);
+% draw nodes
+\draw (12,0) node[below=3pt] {\small $t= 0$} node[above=3pt] {$   $};
+\draw (4,0) node[above=17pt] (1) {$X_t = i$} node[above=3pt] {};
+\draw (2,0) node[above=17pt] {} node[above=3pt] {};
+\draw (6,0) node[above=17pt]  (4) {$X_{t-1}=j$} node[above=3pt] {};
+
+\draw (8,0) node[above=17pt] {} node[above=3pt] {};
+\draw (10,0) node[above=17pt] {} node[above=3pt] {};
+\draw (12,0) node[above=17pt] {$T$} node[above=3pt] {};
+\draw (10,0) node[below=3pt] { \small $t= 1$} node[above=3pt] {};
+\draw (4,0) node[below=3pt] {\small $t = 4$} node[above=3pt] {};
+\draw (6,0) node[below=3pt] {\small $t= 3$} node[above=3pt] {$  $};
+\draw (5,2) node[below=3pt] {\small $r_{ij}$} node[above=3pt] {$  $};
+\draw (8,0) node[below=3pt] {$t=2$} node[above=3pt] {$  $};
+\draw [->] (1) to [out=30,in=150] (4) ;
+\end{tikzpicture}
+\caption{First moment of lifetime rewards}
+\label{fig:}
+\end{figure}
+
+We can compute the first moment of lifetime accumulated rewards for such individual who starts in state $i$, conditioned on the fact that she moves from $i$ to $j$:
+    \begin{equation}
+        \mathds{E}[ \rho_i(t) | i \rightarrow j] = \mathds{E}[ r_{ij} + \rho_j(t-1) ]
+    \end{equation}
+From the conditional expectation, we can retrieve the unconditional expectation using the law of iterated expectations and the fact that we are dealing with a partition of the sample space: \lq\lq Let X be a random variable with sample space $\Omega$. If the events $F_1, F_2, ..., F_n$ form a partition of the sample space, i.e $F_i \cap F_j = \emptyset \; \text{for} \; i \neq j$ and $\cup_i F_i = \Omega$, then:
+
+\begin{equation}
+\mathds{E} (X) = \sum_j \mathds{E}(X | F_j) P(F_j)
+\end{equation}
+see \cite{Grinstead1997} for a proof and an example.\\
+
+
+
+\noindent In our notation, the unconditional expectation of $ \rho_i(t) $ becomes:
+    \begin{equation}\label{unconditional}
+    \begin{split}
+         \mathds{E}[ \rho_i(t)] &= \sum_{j=1}^N \mathds{E}[\rho_i(t) | i \rightarrow j] \; \mathds{P}( i \rightarrow j) = \\
+         &= \sum_{j=1}^N  \mathds{E}[\rho_i(t) | i \rightarrow j]\; p_{ij} =\\
+         &= \sum_{j=1}^N    \mathds{E}[ r_{ij} + \rho_j(t-1)]  p_{ij} = \\
+         &= \sum_{j=1}^N  \{  \mathds{E}[ r_{ij}] + \mathds{E}[\rho_j(t-1)]\}  p_{ij}
+    \end{split}
+    \end{equation}
+in matrix form, this becomes \citep{Caswell2011}:
+
+\begin{equation}
+        \bm{\rho}^1(t+1) = (\mathbf{P} \circ \mathbf{R}^1) \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \;\;\;\; t=0,..., T-1
+\end{equation}
+where $\circ$ represents the Hadamard (or element-by-element) product, $\mathbf{1}$ is a vector of ones and $\bm{\rho}^1(0) = 0$ is the initial condition.\\
+
+To give an intuition, imagine to have a very simple Markov process with two states $S=\{1,2\}$: the individual can start either in state 1 or 2 and then move to state 1 or 2. In order to compute the first moment, start by defining the vector $ \bm{\rho}^{k}$:
+
+\begin{equation}
+ \bm{\rho}^{(1)} (t)=
+\begin{pmatrix}
+\mathds{E}[\rho^1_1]\\
+\mathds{E}[\rho^1_2]\\
+\end{pmatrix}
+\end{equation}
+and the matrix $\mathbf{R}^k$:
+
+\begin{equation}
+ \bm{R}^{(1)} =
+\begin{pmatrix}
+\mathds{E}[r_{11}] & \mathds{E}[r_{21}]\\
+\mathds{E}[r_{12}] & \mathds{E}[r_{22}]\\
+\end{pmatrix}
+\end{equation}
+
+\noindent Using the formula \ref{unconditional}, the expectation of rewards for an individual who starts in state 1 will be:
+
+\begin{equation}
+\begin{split}
+  \mathds{E}[\rho_1(t+1)] &= \sum_{j=1}^2 p_{1j}\{ \mathds{E}[r_{1j}] + \mathds{E}[\rho_j(t)] \}=  \\
+  &= p_{11}\{ \mathds{E}[r_{11}] + \mathds{E}[\rho_1(t)] \} + p_{12}\{ \mathds{E}[r_{12}] + \mathds{E}[\rho_2(t)] \}
+\end{split}
+\end{equation}
+Intuitively, the expectation of rewards for a process that starts in state 1 is equal to a weighted average with weights given by the transition probabilities. Indeed, if the process remains in state 1, it is expected to gain $\mathds{E}[r_{11}]$ plus $\mathds{E}[\rho_1(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 1. Similarly, if the process moves to state 2, it is expected to gain $\mathds{E}[r_{12}]$ plus $\mathds{E}[\rho_2(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 2.
+
+Using matrix notation, we are able to retrieve $\bm{\rho}(t+1)$, i.e. the vector of rewards that have to be accumulated at time $t+1$:
+
+
+\begin{equation}
+\setlength{\jot}{10pt}
+\begin{split}
+    \bm{\rho}^1(t+1) &=       
+\begin{bmatrix}
+      \mathds{E}[\rho_1^1(t+1)]\\
+      \mathds{E}[\rho_2^1(t+1)]\\
+\end{bmatrix}= \\
+  &= 
+ \begin{bmatrix} 
+ p_{11} \big\{ \mathds{E}[r_{11}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{12}\big\{ \mathds{E}[r_{12}]  + \mathds{E}[\rho_2^1(t)]\big\}\\
+  p_{21} \big\{ \mathds{E}[r_{21}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{22}\big\{ \mathds{E}[r_{22}]  + \mathds{E}[\rho_2^1(t)]\big\} \\
+ \end{bmatrix} =\\
+  &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}] + p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)]\\
+ p_{21}\mathds{E}[r_{21}] + 
+ p_{22} \mathds{E}[r_{22}] + p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+  &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}]\\
+ p_{21}\mathds{E}[r_{21}] + 
+ p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+  &= 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}] & p_{12}\mathds{E}[r_{12}]\\
+ p_{21}\mathds{E}[r_{21}] & 
+ p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &= \Bigg( \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}] & p_{21}\mathds{E}[r_{21}\\
+ p_{12}\mathds{E}[r_{12}]&  p_{22} \mathds{E}[r_{22}]\\
+ \end{bmatrix}
+  \Bigg) ^T
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
+ p_{21}\mathds{E}[\rho_1^1(t)] + 
+ p_{22}\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix} =\\
+ &= \Bigg(
+\begin{bmatrix} 
+ p_{11}& p_{21}\\
+ p_{12}& p_{22}\\
+ \end{bmatrix} \circ
+ \begin{bmatrix} 
+ \mathds{E}[r_{11}] &  \mathds{E}[r_{21}] \\
+ \mathds{E}[r_{12}] &  \mathds{E}[r_{22}] \\
+ \end{bmatrix}
+ \Bigg) ^T
+ \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 
+ \begin{bmatrix} 
+ p_{11}& p_{12}\\
+ p_{21}& p_{22}\\
+ \end{bmatrix}
+ \begin{bmatrix}
+      \mathds{E}[\rho_1^1(t)]\\
+      \mathds{E}[\rho_2^1(t)]\\
+\end{bmatrix}= \\
+&= (\mathbf{P} \circ \mathbf{R}^1)^T \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \\
+\end{split}
+\end{equation}
+
+
+\subsection{Derivation of the second moment}
+
+
+\noindent The conditional second moment $\bm{\rho}^2(t)$ of an individual in stage $i$, given a transition from $i$ to $j$, is given by: 
+
+\begin{equation}
+\begin{split}
+    \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] &= \mathds{E} \big\{ [ r_{ij} + \rho_j(t)]^2 \big\} =\\
+    &= \mathds{E} \big\{ [ r_{ij}^2 + \rho_j(t)^2 + 2 r_{ij} \rho_j(t)] \big\} =\\
+     &= \mathds{E} [ r_{ij}^2] +\mathds{E} [ \rho_j(t)^2] + 2 \mathds{E} [r_{ij}] \mathds{E} [\rho_j(t)]  =
+\end{split}
+\end{equation}
+since $r_{ij}$ and $\rho_j(t)$ are modelled as being independent.\\
+
+\noindent The unconditional second moment is given by: 
+
+\begin{equation}
+\begin{split}
+\mathds{E} [\bm{\rho}_i^2 (t+1)] &= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] \mathds{P}(i\rightarrow j) =\\
+&= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] p_{ij} =\\
+&= \sum_{j=1}^N p_{ij} \{ \mathds{E} [ r_{ij}^2] +\mathds{E} [ \rho_j^2(t)] + 2 \mathds{E} [r_{ij}] \mathds{E} [\rho_j(t)]\}
+\end{split}
+\end{equation}
+
+Using again the example of a very simple Markov process with two states $S=\{1,2\}$, we have:
+
+
+\begin{equation}
+\setlength{\jot}{10pt}
+\begin{split}
+    &\bm{\rho}^2(t+1) =    
+\begin{bmatrix}
+      \mathds{E}[\rho_1^2(t+1)]\\
+      \mathds{E}[\rho_2^2(t+1)]\\
+\end{bmatrix}= \\
+  &= 
+ \begin{bmatrix} 
+ p_{11} \big\{ \mathds{E}[r^2_{11}]  + \mathds{E}[\rho_1^2(t)] + 2\mathds{E}[r_{11}]\mathds{E}[\rho_1^1(t)]  \big\} + 
+ p_{12}\big\{ \mathds{E}[r^2_{12}]  + \mathds{E}[\rho_2^2(t)]+ 2\mathds{E}[r_{12}]\mathds{E}[\rho_2^1(t)] \big\} \\
+  p_{21} \big\{ \mathds{E}[r^2_{21}]  + \mathds{E}[\rho_1^2(t)] + 2\mathds{E}[r_{21}]\mathds{E}[\rho_1^1(t)] \big\} +
+  p_{22}\big\{ \mathds{E}[r^2_{22}]  + \mathds{E}[\rho_2^2(t)]+ 2\mathds{E}[r_{22}]\mathds{E}[\rho_2^1(t)]  \big\} \\
+ \end{bmatrix} =\\
+  &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r^2_{11}]  +  p_{12}\mathds{E}[r^2_{12}] + 2p_{11}\mathds{E}[r_{11}]\mathds{E}[\rho_1^1(t)] + 2p_{12}\mathds{E}[r_{12}]\mathds{E}[\rho_2^1(t)] +  p_{11}\mathds{E}[\rho_1^2(t)] +  p_{12}\mathds{E}[\rho_2^2(t)]\\
+ p_{21}\mathds{E}[r^2_{21}]  +  p_{22}\mathds{E}[r^2_{22}] + 2p_{21}\mathds{E}[r_{21}]\mathds{E}[\rho_1^1(t)] + 2p_{22}\mathds{E}[r_{22}]\mathds{E}[\rho_2^1(t)] +  p_{21}\mathds{E}[\rho_1^2(t)] +  p_{22}\mathds{E}[\rho_2^2(t)]\\
+ \end{bmatrix} =\\
+  &=  
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r^2_{11}]  +  p_{12}\mathds{E}[r^2_{12}]\\
+ p_{21}\mathds{E}[r^2_{21}] + p_{22} \mathds{E}[r^2_{22}]\\
+ \end{bmatrix}
+ + 2
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r_{11}] \mathds{E}[\rho_1^1(t)] +  p_{12}\mathds{E}[r_{12}]\mathds{E}[\rho_2^1(t)]\\
+ p_{21}\mathds{E}[r_{21}] \mathds{E}[\rho_1^1(t)] +  p_{22}\mathds{E}[r_{22}]\mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix}
+ +
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[\rho_1^2(t)] + p_{12}\mathds{E}[\rho_2^2(t)] \\
+ p_{21}\mathds{E}[\rho_1^2(t)] +  p_{22}\mathds{E}[\rho_2^2(t)]\\
+ \end{bmatrix} =\\
+  &= 
+ \begin{bmatrix} 
+ p_{11}\mathds{E}[r^2_{11}] & p_{12}\mathds{E}[r^2_{12}]\\
+ p_{21}\mathds{E}[r^2_{21}] &  p_{22} \mathds{E}[r^2_{22}]\\
+ \end{bmatrix}
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 2
+ \begin{bmatrix}
+ p_{11}\mathds{E}[r_{11}] & p_{12}\mathds{E}[r_{12}]\\
+ p_{21}\mathds{E}[r_{21}] & p_{22}\mathds{E}[r_{22}]\\
+ \end{bmatrix}
+ \begin{bmatrix}
+ \mathds{E}[\rho_1^1(t)]\\
+ \mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix}
+ +
+ \begin{bmatrix} 
+ p_{11}& p_{12} \\
+  p_{21}& p_{22} \\
+ \end{bmatrix}
+ \begin{bmatrix}
+ \mathds{E}[\rho_2^1(t)]\\
+ \mathds{E}[\rho_2^2(t)]
+ \end{bmatrix}
+ =
+ \\
+ &= \Bigg( \begin{bmatrix} 
+ p_{11}\mathds{E}[r^2_{11}] & p_{21}\mathds{E}[r^2_{21}\\
+ p_{12}\mathds{E}[r^2_{12}]&  p_{22} \mathds{E}[r^2_{22}]\\
+ \end{bmatrix}
+  \Bigg) ^T
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 2\Bigg( 
+ \begin{bmatrix}
+ p_{11}\mathds{E}[r_{11}] & p_{21}\mathds{E}[r_{21}]\\
+ p_{12}\mathds{E}[r_{12}] & p_{22}\mathds{E}[r_{22}]\\
+ \end{bmatrix} \Bigg) ^T
+ \begin{bmatrix}
+ \mathds{E}[\rho_1^1(t)]\\
+ \mathds{E}[\rho_2^1(t)]\\
+ \end{bmatrix}
+ +\mathbf{P} ^T
+ \bm{\rho}^2(t)=
+ \\
+ &= \Bigg( \begin{bmatrix} 
+ p_{11} & p_{21}\\
+ p_{12}&  p_{22} \\
+ \end{bmatrix}\circ
+ \begin{bmatrix}
+ \mathds{E}[r^2_{11}] &\mathds{E}[r^2_{21}\\
+ \mathds{E}[r^2_{12}] &\mathds{E}[r^2_{22}]\\
+ \end{bmatrix}
+  \Bigg) ^T
+  \begin{bmatrix}
+ 1\\
+ 1\\
+ \end{bmatrix}
+ + 2\Bigg( 
+ \begin{bmatrix}
+ p_{11} & p_{21}\\
+ p_{12}& p_{22}\\
+ \end{bmatrix}
+ \circ
+ \begin{bmatrix}
+ \mathds{E}[r_{11}] & \mathds{E}[r_{21}]\\
+ \mathds{E}[r_{12}] & \mathds{E}[r_{22}]
+ \end{bmatrix}\Bigg) ^T
+ \bm{\rho}^1(t)
+ +\mathbf{P}^T \bm{\rho}^2(t)=
+ \\
+ &=
+ (  \mathbf{P} \circ \mathbf{R}^2 ) ^T +
+ 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t)+
+ +\mathbf{P}^T \bm{\rho}^2(t)=
+ \end{split}
+\end{equation}
+
+
+
+
+\subsection{Derivation of the third moment}
+
+The same reasoning can be applied to the third moment, which is be equal to:
+
+\begin{equation}
+     \bm{\rho}^3(t+1) = (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t)
+\end{equation}
+
+
+
+\subsection{Derivation of the $m^{th}$ moment}
+
+Summarising the above results, we have that the first, second, and third moments of lifetime rewards are given by:
+
+\begin{equation}
+    \begin{split}
+     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1) ^T\mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \\
+      \bm{\rho}^2(t+1) &= (\mathbf{P} \circ \mathbf{R}^2) ^ T\mathbf{1} + 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t) + 
+      \mathbf{P}^T \bm{\rho}^2(t) \\
+     \bm{\rho}^3(t+1) &= (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t) \\
+\end{split}
+\end{equation}for $t=0, ... ,T$ and with $\bm{\rho}^1(0) = 0, \bm{\rho}^2(0) = 0,\bm{\rho}^3(0) = 0$.\\
+Generalising, this is equal to:
+
+\begin{equation}\label{recursive}
+    \bm{\rho}^m(t+1) = \sum_{k=0}^{m} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) \;\; \; m=1,2,...
+\end{equation}
+with $\bm{\rho}^m(0)=0$ 
+
+
+\section{Analytic solution for the $m^{th}$ moment of lifetime rewards}\label{sec:analytical_solution}
+\cite{VanDaalen2017} provide the formula for the analytical solution of the $m^{th}$ moment of lifetime rewards. The original proof can be found in the appendix of their paper. The following computation expands the algebra behind the main results.\\
+
+From the recursive formula \ref{recursive}, one can find the analytical solution solving for the equilibrium of the iterative approximation, i.e. setting $\bm{\rho}(t+1) = \bm{\rho}(t)$. Let us begin by expanding the summation:
+
+
+\begin{equation}
+\begin{split}
+\bm{\rho}^m(t+1) &= \sum_{k=0}^{m} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) =\\
+&= \sum_{k=0}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +  {m \choose m} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) =\\
+&=  \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     {m \choose m} (\mathbf{P} \circ \mathbf{R}^{0}) ^ T \bm{\rho}^m(t) +  {m \choose 0} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{\rho}^0(t)
+\end{split}
+    \end{equation}
+
+set $\bm{\rho}(t+1) = \bm{\rho}(t)$:\\
+\begin{equation}
+\begin{split}
+\bm{\rho}^m(t) &=  \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     {m \choose m} (\mathbf{P} \circ \mathbf{R}^{0}) ^ T \bm{\rho}^m(t) +  {m \choose 0} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{\rho}^0(t)
+\end{split}
+\end{equation}
+
+simplifying the binomial coefficients:\\
+\begin{equation}
+\begin{split}
+\bm{\rho}^m(t) &=  \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     (\mathbf{P} \circ \mathbf{R}^{0}) ^ T \bm{\rho}^m(t) + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{\rho}^0(t)
+\end{split}
+\end{equation}
+
+since $\bm{\rho}^0(t) = \bm{1}$ and $\mathbf{R}^0 = \big ([1]\big)$ as their entries are all raised to $0$, we can further simplify:\\
+\begin{equation}\label{mom}
+\begin{split}
+     \bm{\rho}^m(t) &= 
+     \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     \mathbf{P} ^ T \bm{\rho}^m(t) + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}
+\end{split}
+    \end{equation}
+solving for $\bm{\rho}^m(t)$:    
+\begin{equation}
+\begin{split}
+     \bm{\rho}^m(t) - \mathbf{P} ^ T \bm{\rho}^m(t) &= 
+     \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t)
+     + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}\\
+     ( \mathbf{I} - \mathbf{P}^T)  \bm{\rho}^m(t) &= 
+     \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t)
+     + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1} = 
+\end{split}
+    \end{equation}
+
+The matrix $( \mathbf{I} - \mathbf{P}^T)$ is singular since the entries of the first column of $\mathbf{P}^T$ are all zeros. This is due to the fact that we are using an age-classified model in which individuals at each observed period either grow older, and transit to the subsequent age class, or die. Recalling the simple example of a Markov chain with three age classes:
+
+\begin{equation}
+    \mathbf{P}= \begin{pmatrix}
+    0 & 0 & 0 & 0\\
+    u_{12} & 0 & 0& 0\\
+0 & u_{23} & u_{33}& 0\\
+m_{14} & m_{24} & m_{34}& 1\\
+    \end{pmatrix}
+\end{equation}
+and transposing:
+
+\begin{equation}
+    \mathbf{P}^T= \begin{pmatrix}
+    0 &  u_{12} & 0 & m_{14}\\
+    0 & 0 & u_{23} & m_{24}\\
+    0 & 0 & u_{33} & m_{34}\\
+    0 & 0 & 0 &1\\
+    \end{pmatrix}
+\end{equation}
+
+Since the matrix is singular, it is not possible to compute its inverse and find a solution for $ \bm{\rho}^m(t) $ directly. Nevertheless, in some settings the true interest is not in the whole vector $ \bm{\rho}^m(t) $ but in the vector $\Tilde{\bm{\rho}^m}$ that collects  the  rewards  of transient states only.
+For instance, when dealing with computation of healthy life expectancy, it is reasonable to assume that individuals stop accumulating rewards, i.e. years of life, when they are dead and hence it is sufficient to look at moments of accumulated rewards during transient states.\\
+The vector $\Tilde{\bm{\rho}^m}$ can be obtained by pre-multiplying the  $ \bm{\rho}^m(t) $ by a matrix $\mathbf{Z}$:
+\begin{equation}
+    \Tilde{\bm{\rho}}^k = \mathbf{Z}\bm{\rho}^k
+\end{equation}
+where $\mathbf{Z}$ is given by:
+
+\begin{equation}
+\mathbf{Z}=
+    \begin{bmatrix}
+    \mathbf{I} | \mathbf{0}
+    \end{bmatrix}
+\end{equation}
+with $\mathbf{I}$ being an identity matrix (i.e. a square matrix with entries on the main diagonal equal to one and zeros elsewhere)  of dimension $(s \times s) $ and $\mathbf{0}$ being a matrix of zeros of dimension $(s \times 1) $.
+To make an example, if $s = 4$,  $\bm{\rho}^k(t)$ will be:
+
+\begin{equation}
+\bm{\rho}^k(t) =
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+E[\rho^k_{4}]\\
+\end{bmatrix}
+\end{equation}
+and $\mathbf{Z}$:
+
+\begin{equation}
+\mathbf{Z}=
+    \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+\end{equation}
+so that:
+
+\begin{equation}
+\Tilde{\bm{\rho}}^k(t) =
+    \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+    \begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+E[\rho^k_{4}]\\
+\end{bmatrix} = 
+\begin{bmatrix}
+E[\rho^k_1]\\
+E[\rho^k_2]\\
+E[\rho^k_{3}]\\
+\end{bmatrix}
+\end{equation}
+
+
+Applying this reasoning to Equation \ref{mom}, we obtain:
+
+
+
+
+
+
+
+\begin{equation}\label{mom2}
+\begin{split}
+     \mathbf{Z}\bm{\rho}^m(t) &= \mathbf{Z} \Bigg[ 
+     \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     \mathbf{P} ^ T \bm{\rho}^m(t) + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}\Bigg] = \\
+     \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}\mathbf{Z}  (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T\mathbf{Z}^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} \mathbf{P}^T \mathbf{Z}^T \Tilde{\bm{\rho}^m}  + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}
+\end{split}
+    \end{equation}
+    
+    
+Note that $\mathbf{Z} \mathbf{P}^T \mathbf{Z}^T = \mathbf{U}^T $ and $ \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m-k})\mathbf{Z}^T  = (\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T $. For a simple example, see section \ref{sec:examples}. Applying this additional simplification, we get:
+
+
+\begin{equation}\label{mom2}
+\begin{split}
+     \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{U}^T \Tilde{\bm{\rho}^m}  + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}\\
+     \Tilde{\bm{\rho}^m} -\mathbf{U}^T \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}  \\
+     (\mathbf{I} - \mathbf{U}) \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}  \\
+     \Tilde{\bm{\rho}^m} &= (\mathbf{I} - \mathbf{U})^{-1} \Bigg[ \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1} \Bigg]
+\end{split}
+    \end{equation}
+
+It can be proved \color{where??} that  \citep{Caswell2009}:
+
+\begin{equation}
+    (\mathbf{I} - \mathbf{U})^{-1} = \sum_{t=0}^\infty \mathbf{U}^t = \big( \mathds{E} (\nu_{ij}) \big) = \math
+\end{equation}
+
+\subsection{Example}\label{sec:examples}
+
+
+\begin{equation}
+\begin{split}
+    \mathbf{Z} \mathbf{P}^T \mathbf{Z}^T &=
+    \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+    \begin{pmatrix}
+    0 &  u_{12} & 0 & m_{14}\\
+    0 & 0 & u_{23} & m_{24}\\
+    0 & 0 & u_{33} & m_{34}\\
+    0 & 0 & 0 &1\\
+    \end{pmatrix}
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1& 0\\
+    0 & 0 & 1\\
+    0 & 0 & 0\\
+    \end{bmatrix}
+    = \\
+    &= \begin{bmatrix}
+    0 & u_{12} & 0 & m_{14}\\
+    0 & 0 & u_{23} & m_{24}\\
+    0 & 0 & u_{23} & m_{24}\\
+    \end{bmatrix}
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1& 0\\
+    0 & 0 & 1\\
+    0 & 0 & 0\\
+    \end{bmatrix} = \\
+    &= 
+    \begin{bmatrix}
+    0 & u_{12} & 0\\
+    0 & 0 & u_{23}\\
+    0 & 0 & u_{33}
+    \end{bmatrix} =
+    \mathbf{U}^T
+    \end{split}
+\end{equation}
+
+
+ \begin{equation}
+     \begin{split}
+          & \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m-k})\mathbf{Z}^T = \\
+          &=
+     \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+    \Bigg(
+    \begin{bmatrix}
+    0 & 0 & 0 & 0\\
+    u_{12} & 0 & 0& 0\\
+0 & u_{23} & u_{33}& 0\\
+m_{14} & m_{24} & m_{34}& 1\\
+    \end{bmatrix}
+    \circ 
+    \begin{bmatrix}
+  E[r^{m-k}_{11}]  &  E[r^{m-k}_{21}]  &E[r^{m-k}_{31}]  & E[r^{m-k}_{41}] \\
+  E[r^{m-k}_{12}]  &  E[r^{m-k}_{22}]  &E[r^{m-k}_{32}]  & E[r^{m-k}_{42}] \\
+  E[r^{m-k}_{13}]  &  E[r^{m-k}_{23}]  &E[r^{m-k}_{33}]  & E[r^{m-k}_{43}] \\
+    E[r^{m-k}_{14}]  &  E[r^{m-k}_{24}]  &E[r^{m-k}_{34}]  & E[r^{m-k}_{44}] \\
+ \end{bmatrix}
+ \Bigg)
+       \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1& 0\\
+    0 & 0 & 1\\
+    0 & 0 & 0\\
+    \end{bmatrix} =\\
+    &=
+     \begin{bmatrix}
+   1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+     0 & 0 & 1 & 0\\
+    \end{bmatrix}
+    \Bigg(
+    \begin{bmatrix}
+    0 & 0 & 0 & 0\\
+    u_{12}E[r^{m-k}_{12}] & 0 & 0 & 0\\
+    0 & u_{23}E[r^{m-k}_{23}] & u_{33}E[r^{m-k}_{33}] & 0\\
+    m_{14} E[r^{m-k}_{14}] & m_{24}E[r^{m-k}_{24}] & m_{34}E[r^{m-k}_{34}] & E[r^{m-k}_{44}]\\
+    \end{bmatrix} 
+     \Bigg)
+       \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1& 0\\
+    0 & 0 & 1\\
+    0 & 0 & 0\\
+    \end{bmatrix} =\\
+    &=
+    \begin{bmatrix}
+    0 & 0 & 0 & 0\\
+    u_{12}E[r^{m-k}_{12}] & 0 & 0 & 0\\
+    0 & u_{23}E[r^{m-k}_{23}] & u_{33}E[r^{m-k}_{33}] & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1& 0\\
+    0 & 0 & 1\\
+    0 & 0 & 0\\
+    \end{bmatrix} =\\
+    &=
+    \begin{bmatrix}
+    0 & 0 &0\\
+    u_{12}E[r^{m-k}_{12}] & 0 & 0\\
+    0 & u_{23}E[r^{m-k}_{23}] & u_{33}E[r^{m-k}_{33}]
+    \end{bmatrix} =\\
+    &=
+    \begin{bmatrix}
+     0 & 0 &0\\
+    u_{12} & 0 & 0\\
+    0 & u_{23}& u_{33}\\
+    \end{bmatrix}
+    \circ
+    \begin{bmatrix}
+    0 & 0 &0\\
+   E[r^{m-k}_{12}] & 0 & 0\\
+    0 & E[r^{m-k}_{23}] & E[r^{m-k}_{33}]\\
+    \end{bmatrix}
+     \end{split}
+ \end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+the above formula becomes:
+
+
+\begin{equation}\label{mom2}
+\begin{split}
+     \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{U}^T \Tilde{\bm{\rho}^m}  + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}\\
+     \Tilde{\bm{\rho}^m} -\mathbf{U}^T \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}  \\
+     (\mathbf{I} - \mathbf{U}) \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}  \\
+     \Tilde{\bm{\rho}^m} &= (\mathbf{I} - \mathbf{U})^{-1} \Bigg[ \sum_{k=1}^{m-1} {m \choose k}(\mathbf{U} \circ \Tilde{\mathbf{R}}^{m-k}) ^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1} \Bigg]
+\end{split}
+    \end{equation}
+since $\mathbf{N} = (\mathbf{I}_\omega - \mathbf{U})^{-1}$ \cite{Caswell2018}:
+
+\begin{equation}
+     \Tilde{\bm{\rho}^m} = \mathbf{N}^T\mathbf{Z} (\mathbf{P} \circ \mathbf{R}_m)^T \bm{1}_s + \sum_{k=1}^{m-1} \binom{m}{k} \mathbf{N}^T \big( \mathbf{U} \circ \Tilde{\mathbf{R}}_{m-k})^T  \Tilde{\bm{\rho}}^k 
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rewards are random variables with specified moments. By transitioning from state to state, the Markov chain generates a sequence of rewards. The moments of each reward can be collected in a series of reward matrices \citep{Caswell2018}. For instance, the reward matrix $\mathbf{R}_k$ collects all the $k^{th}$ moments of the rewards:
+\begin{equation}
+\mathbf{R}_k = \big( E[r^k_{ij}] \big)
+\end{equation}
+when modelling healthy longevity, it is useful to center all the moments around zero and to assume that rewards accumulated over time and stops at death \citep{Caswell2018}.\\
+
+One question we might want to ask is what is the expected reward after $n$ transition. In order to answer to this question, it is useful to define a new variable $v_i(n)$ that represents the expected total rewards in the next $n$ transitions with a Markov chain starting in state $i$:
+
+\begin{equation}\label{rewards}
+    v_i(n) = \sum_{j=1}^N p_{ij} [ r_{ij} + v_j(n-1) ] \; \;\;\; i = 1,2,...,N \;\;\;\; n=1,2,...
+\end{equation}
+we could picture this as:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+% draw horizontal line   
+\draw (-0.5,0) -- (9,0);
+% draw vertical lines
+\foreach \x in {0,2,4,6,8}
+\draw (\x cm,15pt) -- (\x cm,-3pt);
+% draw nodes
+\draw (0,0) node[below=3pt] {\small $n= 0$} node[above=3pt] {$   $};
+\draw (0,0) node[above=17pt]  {$X_0 = i$} node[above=3pt] {};
+\draw (2,0) node[above=17pt] {} node[above=3pt] {};
+\draw (4,1) node[above=17pt] (1) {$v_j(2)$} node[above=3pt] {};
+\draw (6,1) node[above=17pt] (4) {$v_i(3)$} node[above=3pt] {};
+\draw (6,0) node[above=17pt]  {$X_3=j$} node[above=3pt] {};
+\draw (8,0) node[above=17pt] {$...$} node[above=3pt] {};
+\draw (2,0) node[below=3pt] { \small $n= 1$} node[above=3pt] {};
+\draw (4,0) node[below=3pt] {\small $n= 2$} node[above=3pt] {};
+\draw (6,0) node[below=3pt] {\small $n= 3$} node[above=3pt] {$  $};
+\draw (5,3) node[below=3pt] {\small $p_{ij}$} node[above=3pt] {$  $};
+\draw (8,0) node[below=3pt] {$...$} node[above=3pt] {$  $};
+\draw [->] (1) to [out=30,in=150] (4) ;
+\end{tikzpicture}
+\caption{Rewards}
+\label{fig:markov_chain}
+\end{figure}
+
+\noindent The expected total rewards after $n$ steps, when the Markov chain starts from state $i$ and ends in any state $j$, can be thought as the reward $r_{ij}$ that the system gains while moving from state $i$ to state $j$ plus the expected gain until $n-1$ that the system would realise if it had started in state $j$. Note that we are summing each possible state $j = 1,2, ...N$, i.e. including state $i$. These earnings must then be weighted by their respective probability $p_{ij}$ (check).\\
+
+\noindent Expanding the summation, equation \ref{rewards} can be written as:
+\begin{equation}
+   v_i(n) = \sum_{j=1}^N p_{ij}r_{ij} +  \sum_{j=1}^N p_{ij}v_j(n-1) \;\;\;\; i=1,2,...,N \;\;\;\; n=1,2,3,...
+\end{equation}
+defining $q_i =  \sum_{j=1}^N p_{ij}r_{ij}$, we have:
+\begin{equation}
+   v_i(n) = q_i +  \sum_{j=1}^N p_{ij}v_j(n-1) \;\;\;\; i=1,2,...,N \;\;\;\; n=1,2,3,..
+\end{equation}
+$q_i$ can be thought as the reward expected from a process that starts in state $i$ and moves by one step. It is also called \textit{expected immediate reward} for state $i$. 
+In vector form, we have:
+\begin{equation}
+   \mathbf{v}(n) = \mathbf{q} +  \mathbf{P}\mathbf{v}(n-1)\;\;\;\; n=1,2,3,..
+\end{equation}
+where $ \mathbf{v}(n)$ is called the \textit{total-value} vector and has entries $ v_i(n)$ for $i=1,2,...,N$ and $ \mathbf{q}$ is the vector of expected immediate rewards with entries $q_i$   for $i=1,2,...,N$.
+
+
+
+\subsection{}
+
+\begin{equation}\label{mom2}
+\begin{split}
+     \mathbf{Z}\bm{\rho}^m(t) &= \mathbf{Z} \Bigg[ 
+     \sum_{k=1}^{m-1} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) +
+     \mathbf{P} ^ T \bm{\rho}^m(t) + (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}\Bigg] = \\
+     \Tilde{\bm{\rho}^m} &= \sum_{k=1}^{m-1} {m \choose k}\mathbf{Z}  (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T\mathbf{Z}^T \Tilde{\bm{\rho}}^k(t) + \mathbf{Z} \mathbf{P}^T \mathbf{Z}^T \Tilde{\bm{\rho}^m}  + \mathbf{Z} (\mathbf{P} \circ \mathbf{R}^{m}) ^ T \bm{1}
+\end{split}
+    \end{equation}
+
+
+
+
+
+
+
+
 
 
 \subsubsection{Example: the toy-maker \citep{Howard1960}}\label{toy-maker1}
@@ -119,239 +942,105 @@ Again, we find that $\pi_1(n)$ converges to $4/9$ and $\pi_2(n)$ to $5/9$ as $n$
 \end{small}
 
 
+\subsubsection{Example, con't: the toy-maker \citep{Howard1960}}
 
-\subsection{Derivation of formula \ref{moments}}
+The following is taken from \cite{Howard1960} p.19:
 
-Recall that the first, second, and third moments of lifetime rewards are given by:
 
+\begin{small}
+Let us add a reward structure to the toy-maker problem investigated in section \ref{toy-maker1}, for instance:
+\begin{enumerate}
+    \item if the process starts in state 1 and transits to state 1 in the next period, the reward is equal to 9 dollars
+     \item if the process starts in state 2 and transits to state 2 in the next period, the reward is equal to -7 dollars
+      \item if the process starts in state 1(2) and transits to state 2(1) in the next period, the reward is equal to 3 dollars
+\end{enumerate}
+The different rewards can be collected in a reward matrix $\mathbf{R}$.
 \begin{equation}
-    \begin{split}
-     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1) ^T\mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \\
-      \bm{\rho}^2(t+1) &= (\mathbf{P} \circ \mathbf{R}^2) ^ T\mathbf{1} + 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t) + 
-      \mathbf{P}^T \bm{\rho}^2(t) \\
-     \bm{\rho}^3(t+1) &= (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t) \\
-\end{split}
-\end{equation}for $t=0, ... ,T$ and with $\rho^1(0) = 0, \rho^2(0) = 0,\rho^3(0) = 0$.
-
-\textit{Compute the first moment:}\\
-
-Consider an individual who is in state $i$ at time $t$: she has still $t$ steps ahead until $T$.
-The individual makes a transition from state $i$ to state $j$, thus gaining a reward $r_{ij}$. After this transition, the individual will find herself in state $j$ and with $t-1$ steps remaining.\\
-
-
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}
-% draw horizontal line   
-\draw (-0.5,0) -- (12,0);
-% draw vertical lines
-\foreach \x in {0,2,4,6,8,10,12}
-\draw (\x cm,3pt) -- (\x cm,-3pt);
-% draw nodes
-\draw (12,0) node[below=3pt] {\small $t= 0$} node[above=3pt] {$   $};
-\draw (4,0) node[above=17pt] (1) {$X_t = i$} node[above=3pt] {};
-\draw (2,0) node[above=17pt] {} node[above=3pt] {};
-\draw (6,0) node[above=17pt]  (4) {$X_{t-1}=j$} node[above=3pt] {};
-
-\draw (8,0) node[above=17pt] {} node[above=3pt] {};
-\draw (10,0) node[above=17pt] {} node[above=3pt] {};
-\draw (12,0) node[above=17pt] {$T$} node[above=3pt] {};
-\draw (10,0) node[below=3pt] { \small $t= 1$} node[above=3pt] {};
-\draw (4,0) node[below=3pt] {\small $t = 4$} node[above=3pt] {};
-\draw (6,0) node[below=3pt] {\small $t= 3$} node[above=3pt] {$  $};
-\draw (5,2) node[below=3pt] {\small $r_{ij}$} node[above=3pt] {$  $};
-\draw (8,0) node[below=3pt] {$t=2$} node[above=3pt] {$  $};
-\draw [->] (1) to [out=30,in=150] (4) ;
-\end{tikzpicture}
-\caption{}
-\label{fig:}
-\end{figure}
-
-
-
-
-\noindent We can compute the expectation of rewards for such individual who starts in state $i$, conditioned on the fact that the individual moves from $i$ to $j$:
-    \begin{equation}
-        E[ \rho_i(t) | i \rightarrow j] = E[ r_{ij} + \rho_j(t-1) ]
-    \end{equation}
-From the conditional expectation, we can retrieve the unconditional expectation using a special case of the law of iterated expectations \citep{Grinstead1997}: \lq\lq Let X be a random variable with sample space $\Omega$. If the events $F_1, F_2, ..., F_n$ form a partion of the sample space, i.e $F_i \cap F_j = \emptyset \; \text{for} \; i \neq j$ and $\cup_i F_i = \Omega$, then:
-
-\begin{equation}
-\mathds{E} (X) = \sum_j E(X | F_j) P(F_j)
-\end{equation}
-see \cite{Grinstead1997} (p.240) for a proof and an example.\\
-
-
-
-\noindent In our notation, the unconditional expectation of $ \rho_i(t) $ becomes:
-    \begin{equation}\label{unconditional}
-    \begin{split}
-         E[ \rho_i(t)] &= \sum_{j=1}^N E[\rho_i(t) | i \rightarrow j] \; \mathds{P}( i \rightarrow j) = \\
-         &= \sum_{j=1}^N  E[\rho_i(t) | i \rightarrow j]\; p_{ij} =\\
-         &= \sum_{j=1}^N    E[ r_{ij} + \rho_j(t-1)]  p_{ij} = \\
-         &= \sum_{j=1}^N  \{  E[ r_{ij}] + E[\rho_j(t-1)]\}  p_{ij}
-    \end{split}
-    \end{equation}
-in matrix form, this becomes \citep{Caswell2011}:
-
-\begin{equation}
-        \bm{\rho}^1(t+1) = (\mathbf{P} \circ \mathbf{R}^1) \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) \;\;\;\; t=0,..., T-1
-\end{equation}
-where $\circ$ represents the Hadamard (or element-by-element) product, $\mathbf{1}$ is a vector of ones and $\bm{\rho}^1(0) = 0$ is the initial condition.
-
-
-
-
-\subsubsection{Example}
-To give an intuition, imagine to have a very simple Markov process with two states $S=\{1,2\}$: the individual can start either in state 1 or 2 and then move to state 1 or 2. In order to compute the first moment, start by defining the vector$ \bm{\rho}^{(k)}$:
-
-\begin{equation}
- \bm{\rho}^{(1)} =
-\begin{pmatrix}
-E[\rho^1_1]\\
-E[\rho^1_2]\\
-\end{pmatrix}
-\end{equation}
-and the matrix $\mathbf{R}_k$:
-
-\begin{equation}
- \bm{R}^{(1)} =
-\begin{pmatrix}
-E[r_{11}] & E[r_{21}]\\
-E[r_{12}] & E[r_{22}]\\
-\end{pmatrix}
-\end{equation}
-
-\noindent Using the formula \ref{unconditional}, the expectation of rewards for an individual who starts in state 1 will be:
-
-\begin{equation}
-\begin{split}
-  \mathds{E}[\rho_1(t+1)] &= \sum_{j=1}^2 p_{1j}\{ \mathds{E}[r_{1j}] + \mathds{E}[\rho_j(t)] \}=  \\
-  &= p_{11}\{ \mathds{E}[r_{11}] + \mathds{E}[\rho_1(t)] \} + p_{12}\{ \mathds{E}[r_{12}] + \mathds{E}[\rho_2(t)] \}
-\end{split}
-\end{equation}
-Intuitively, the expectation of rewards for a process that starts in state 1 is equal to a weighted average with weights given by the transition probabilities. Indeed, if the process remains in state 1, it is expected to gain $\mathds{E}[r_{11}]$ plus $\mathds{E}[\rho_1(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 2. Similarly, if the process moves to state 2, it is expected to gain $\mathds{E}[r_{12}]$ plus $\mathds{E}[\rho_2(t)] $, i.e. the rewards that still have to be accumulated at time $t$, given that the process will be in state 2.
-
-Using matrix notation, we are able to retrieve $\bm{\rho}(t+1)$, i.e. the vector of rewards that have to be accumulated at time $t+1$:
-
-\begin{equation}
-\begin{split}
-     \bm{\rho}^1(t+1) &= (\mathbf{P} \circ \mathbf{R}^1)^T \mathbf{1} + \mathbf{P}^T \bm{\rho}^1(t) 
-\end{split}
-\end{equation}
-
-\begin{equation}
-\setlength{\jot}{10pt}
-\begin{split}
-    \bm{\rho}^1(t+1) &= 
+\mathbf{R} = 
 \begin{bmatrix}
-      \mathds{E}[\rho_1^1(t+1)]\\
-      \mathds{E}[\rho_2^1(t+1)]\\
-\end{bmatrix}= \\
-&= \Bigg(
-\begin{bmatrix} 
- p_{11}& p_{21}\\
- p_{12}& p_{22}\\
- \end{bmatrix} \circ
- \begin{bmatrix} 
- \mathds{E}[r_{11}] &  \mathds{E}[r_{21}] \\
- \mathds{E}[r_{12}] &  \mathds{E}[r_{22}] \\
- \end{bmatrix}
- \Bigg) ^T
- \begin{bmatrix}
- 1\\
- 1\\
- \end{bmatrix}
- + 
- \begin{bmatrix} 
- p_{11}& p_{12}\\
- p_{21}& p_{22}\\
- \end{bmatrix}
- \begin{bmatrix}
-      \mathds{E}[\rho_1^1(t)]\\
-      \mathds{E}[\rho_2^1(t)]\\
-\end{bmatrix}= \\
-&= \Bigg( \begin{bmatrix} 
- p_{11}\mathds{E}[r_{11}] & p_{21}\mathds{E}[r_{21}\\
- p_{12}\mathds{E}[r_{12}]& 
- p_{22} \mathds{E}[r_{22}]\\
- \end{bmatrix}
-  \Bigg) ^T
-  \begin{bmatrix}
- 1\\
- 1\\
- \end{bmatrix}
- + 
- \begin{bmatrix} 
- p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
- p_{21}\mathds{E}[\rho_1^1(t)] + 
- p_{22}\mathds{E}[\rho_2^1(t)]\\
- \end{bmatrix} =\\
- &= 
- \begin{bmatrix} 
- p_{11}\mathds{E}[r_{11}] & p_{12}\mathds{E}[r_{12}]\\
- p_{21}\mathds{E}[r_{21} & 
- p_{22} \mathds{E}[r_{22}]\\
- \end{bmatrix}
-  \begin{bmatrix}
- 1\\
- 1\\
- \end{bmatrix}
- + 
- \begin{bmatrix} 
- p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
- p_{21}\mathds{E}[\rho_1^1(t)] + 
- p_{22}\mathds{E}[\rho_2^1(t)]\\
- \end{bmatrix} =\\
- &=  
- \begin{bmatrix} 
- p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}]\\
- p_{21}\mathds{E}[r_{21}] + 
- p_{22} \mathds{E}[r_{22}]\\
- \end{bmatrix}
- + 
- \begin{bmatrix} 
- p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)] \\
- p_{21}\mathds{E}[\rho_1^1(t)] + 
- p_{22}\mathds{E}[\rho_2^1(t)]\\
- \end{bmatrix} =\\
- &=  
- \begin{bmatrix} 
- p_{11}\mathds{E}[r_{11}]  +  p_{12}\mathds{E}[r_{12}] + p_{11}\mathds{E}[\rho_1^1(t)] + p_{12}\mathds{E}[\rho_2^1(t)]\\
- p_{21}\mathds{E}[r_{21}] + 
- p_{22} \mathds{E}[r_{22}] + p_{21}\mathds{E}[\rho_1^1(t)] + 
- p_{22}\mathds{E}[\rho_2^1(t)]\\
- \end{bmatrix} =\\
- &=  
- \begin{bmatrix} 
- p_{11} \big\{ \mathds{E}[r_{11}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{12}\big\{ \mathds{E}[r_{12}]  + \mathds{E}[\rho_2^1(t)]\big\}\\
-  p_{21} \big\{ \mathds{E}[r_{21}]  + \mathds{E}[\rho_1^1(t)]\big\} + p_{22}\big\{ \mathds{E}[r_{22}]  + \mathds{E}[\rho_2^1(t)]\big\} \\
- \end{bmatrix}
-\end{split}
+r_{11} & r_{12}\\
+r_{21} & r_{22}\\
+\end{bmatrix} =
+\begin{bmatrix}
+9 & 3\\
+3 & -7\\
+\end{bmatrix}
+\end{equation}
+From section \ref{toy-maker1} we have:
+\begin{equation}
+\mathbf{P} = 
+\begin{bmatrix}
+0.5 & 0.5\\
+0.4 & 0.6\\
+\end{bmatrix}
+\end{equation}
+and so we can find the vector of expected immediate rewards:
+\begin{equation}
+    \mathbf{q} = 
+    \begin{bmatrix}
+    q_1\\
+    q_2
+    \end{bmatrix} =
+    \begin{bmatrix}
+    \sum_{j=1}^N p_{1j}r_{1j} = p_{11}r_{11} + p_{12}r_{12}\\
+    \sum_{j=1}^N p_{2j}r_{2j} = p_{21}r_{21} + p_{22}r_{22}\\
+    \end{bmatrix}=
+     \begin{bmatrix}
+    0.5*9 + 0.5*3\\
+    0.4*3 - 0.6*7
+    \end{bmatrix}=
+     \begin{bmatrix}
+    6\\
+    -3
+    \end{bmatrix}
+\end{equation}
+the vector $\mathbf{q}$ tells us that the toy-maker expects to make 6 dollars the next week if she starts with a successful toy while she expects a loss of 3 dollars, if she starts with an unsuccessful one.\\
+
+\noindent From this we can compute $v_i(n)$ as a function of n. Recall:
+
+\begin{equation}
+    v_i(n) = q_i + \sum_{j=1}^N p_{ij}v_j(n-1) 
 \end{equation}
 
-
-\noindent \textit{Compute the second moment:}\\
-\noindent The conditional second moment $\bm{\rho}^2$ of an individual in stage $i$, given a transition from $i$ to $j$, is given by: 
 
 \begin{equation}
 \begin{split}
-    \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] &= \mathds{E} \big\{ [ r_{ij} + \rho_j(t)]^2 \big\} =\\
-    &= \mathds{E} \big\{ [ r_{ij}^2 + \rho_j(t)^2 + 2 r_{ij} \rho_j(t)] \big\} =\\
-     &= \mathds{E} [ r_{ij}^2] +\mathds{E} [ \rho_j(t)^2] + 2 \mathds{E} [r_{ij}] \mathds{E} [\rho_j(t)]  =
+     v_1(0) &= 0\\ 
+     v_2(0) &= 0 
 \end{split}
 \end{equation}
-since $r_{ij}$ and $\rho_j(t)$ are independent.\\
 
-\noindent The unconditional second moment is given by: 
 
 \begin{equation}
 \begin{split}
-\mathds{E} [\bm{\rho}_i^2 (t+1)] &= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] \mathds{P}(i\rightarrow j) =\\
-&= \sum_{j=1}^N \mathds{E} [\bm{\rho}_i^2 (t+1) | i \rightarrow j ] p_{ij} =\\
+     v_1(1) &= q_1 + (p_{11}v_1(0) +p_{12}v_2(0) = 6  \\ 
+     v_2(1) &= q_2 + (p_{21}v_1(0) +p_{22}v_2(0) = -3
 \end{split}
 \end{equation}
+
+\begin{equation}
+\begin{split}
+     v_1(2) &= q_1 + (p_{11}v_1(1) +p_{12}v_2(1) = 7.5  \\ 
+     v_2(2) &= q_2 + (p_{21}v_1(1) +p_{22}v_2(1) = -2.4
+\end{split}
+\end{equation}
+
+\noindent As we continue computing the recursive formula, we obtain the following:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 & \\ 
+ \hline
+ $v_1(n)$ & 0& 6& 7.5& 8.55& 9.555&10.5555 \\ 
+ $v_2(n)$  & 0 & -3  & -2.4 & -1.44 &-0.444 & 0.5556\\ 
+\end{tabular}
+\end{center}
+
+The asymptotic behaviour of the process suggests that having a successful toy is worth 10 dollars more than having an unsuccessful product, since $v_1(n) - v_2(n)$ approaches 10 as $n$ increases. Moreover, an additional week seems to increase profit by  1 dollar in each case: both $v_1(n) - v_1(n-1)$ and $v_2(n) - v_2(n-1)$ approach 1. For instance, after 5 weeks the toy-maker expects to make 10.5 dollars of profit if she now has a successful toy and 0.5 dollars if she instead has an unsuccessful one.
+\end{small}
+
+
+
 
 \subsection{\color{red}check}
 The combination of the assumptions that P has the structure (3) and that $r_{i,s+1} =0$  for all i means that every individual will eventually be absorbed in a state in which future rewards are zero; thus $\rho^1(t)$ will converge to a limit as $T\rightarrow \infty$; this limit is the expectation of lifetime rewards calculated over the entire lifetime of every individual. See the section Discussion for discounting necessary to calculate asymptotic rewards in ergodic Markov chains, when this eventual end to accumulation does not hold. \citep{Caswell2018}

@@ -11,9 +11,22 @@
 \usepackage{color}
 \usepackage{enumitem} 
 
+
 % Chapter title
 \usepackage{titlesec}
 \titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge\bf}
+
+% Paragraph
+\usepackage{titlesec}
+\setcounter{secnumdepth}{5}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\usepackage{booktabs}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
 
 
 \usetikzlibrary{automata}
@@ -43,12 +56,14 @@
 \setcitestyle{authoryear,open={(},close={)}}
 
 
-
-
  
 \title{MSc Thesis}
 \author{najmabader}
 \date{\today}
+
+\usepackage{hyperref}
+
+
  
 \begin{document}
 
