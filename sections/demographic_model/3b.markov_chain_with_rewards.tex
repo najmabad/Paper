@@ -4,7 +4,7 @@
 
 \begin{document}
 
-\newpage
+
 \section{Markov chains with rewards}
 
 Markov chains with rewards were introduced by \cite{Howard1960} to analyse decisions in Markovian sequential processes. Since their introduction, they have been extensively investigated - for some examples, see \cite{Howard1960}, \cite{Puterman1994}, and \cite{Sheskin2010}. Markov chains with rewards have been used to study income or cost accumulated over the lifetime. More recently, they have been applied to population biology as a tool to study lifetime reproduction $R_0$ \citep{Caswell2011, VanDaalen2015, VanDaalen2017} and other properties of individuals.\\
@@ -18,14 +18,13 @@ I will explore the case of a discrete-time, finite-state, and absorbing Markov p
 \noindent Imagine dealing with a finite-state Markov chain where a reward $r_{ij}$ is accumulated each time the process makes a transition from state $i$ to state $j$. The rewards may be dollars, units of production, or any other output of interest, such as the production of children \citep{Caswell2011, VanDaalen2015, VanDaalen2017} or years of healthy life \citep{Caswell2018}.
 When modelling healthy life expectancy, rewards might be thought of as being all positive. In other settings (e.g. when dealing with lifetime income or costs) it might be more appropriate to introduce negative rewards.\\
 
-Lifetime rewards can be modelled as random variables since they originate from the accumulated random rewards and the trajectory taken by an individual, which is itself a random variable  \citep{Caswell2011}.\\
-It is hence interesting to look at various statistical properties of lifetime rewards, such as their mean value, variance, the coefficient of variation and skewness. \cite{Caswell2011} provided a set of recurrence relations for computing the $m^{th}$ moment of lifetime rewards. \cite{VanDaalen2017} then elaborated on these formulas to provide an exact solution that can be used to retrieve the statistical properties of lifetime rewards.  For this analysis, I will use the exact solution of \cite{VanDaalen2017} and summarise their main results. A more detailed proof can be found in the appendix of their paper.\\
+Lifetime rewards can be modelled as random variables since they originate from the accumulated random rewards and from the trajectory taken by an individual, which is itself a random variable  \citep{Caswell2011}.\\
+It is hence interesting to look at various statistical properties of lifetime rewards, such as their mean value, variance, the coefficient of variation and skewness. \cite{Caswell2011} provided a set of recurrence relations for computing the $m^{th}$ moment of lifetime rewards. \cite{VanDaalen2017} then elaborated on these formulas to provide an exact solution that can be used to retrieve the statistical properties of lifetime rewards.  For this analysis, I will use the exact solution of \cite{VanDaalen2017} and summarise their main results. A more detailed proof can be found in the appendix of their paper.
 
-\subsection{Computing lifetime rewards: a backward solution}
+\subsection{Computing lifetime rewards: a backward solution}\label{sec:backward_solution}
 In order to compute the total accumulated rewards, we can proceed in a \lq\lq backward fashion'' \citep{Caswell2011, Howard1960}. Imagine that the Markov chain evolves over a finite time horizon that ends at time $T$, with $t$ being the time remaining until $T$. Without loss of generality, assume that the state space has $s$ elements, $S=\{1,2,...,s\}$ with $\tau$ transient states and $\alpha$ absorbing ones. For simplicity, we will assume for the moment that $\alpha =1$, e.g. there is only one cause of death.\\
 
 Let $\bm{\rho}^k(t)$ be the vector collecting the $k^{th}$ moments of the remaining lifetime rewards as a function of the initial state of the individual:
-    
 \begin{equation}
 \bm{\rho}^{k}(t) =
 \begin{bmatrix}
@@ -38,8 +37,7 @@ E[\rho^k_{s}]
 The vector $\bm{\rho}^k(t)$ has dimension $s \times 1$ since an individual could start in any of the state belonging to the state space $S = \{1,2,..., s\}$.\\ Note that the superscript refers to the $k^{th}$ order of the moment while the subscript refers to the entry of the vector.
 We assume that $\bm{\rho}^k(T) = \bm{0}  $  meaning that no additional rewards will to be collected at time $t=T$.\\
 
-Define a series of reward matrices $\mathbf{R}^k$ that collect the moments of the $r_{ij}$. For instance, the matrix of the $k^{th}$ moment of the rewards $r_{ij}$ will be denoted as $\mathbf{R}^k$ and be of the form:
-
+Rewards are random variables with specified moments. The moments of each reward can be collected in a series of reward matrices \citep{Caswell2018}. For instance, the reward matrix $\mathbf{R}_k$ collects all the $k^{th}$ moments of the rewards:
 \begin{equation}
  \bm{R}^{k} = 
  \begin{bmatrix}
@@ -48,15 +46,15 @@ E[r^k_{12}]  &  E[r^k_{22}]  & \cdots &  E[r^k_{s2}] \\
 \vdots & & &\\
   E[r^k_{1s}]  &  E[r^k_{2s}]  & \cdots &  E[r^k_{ss}] \\
  \end{bmatrix}
-\end{equation}\\
+\end{equation}
 where the $(i,j)$ entry represent the $k^{th}$ moment of the reward associated with a transition from state $i$ to state $j$.\\
 
 
 The general formula for the  $m^{th}$ moment provided by \cite{Caswell2011} is:
-
 \begin{equation}\label{moments}
     \bm{\rho}^m(t+1) = \sum_{k=0}^{m} {m \choose k} (\mathbf{P} \circ \mathbf{R}^{m-k}) ^ T \bm{\rho}^k(t) \;\; \; m=1,2,...
 \end{equation}
+
 with $\mathbf{P}$ being the transition matrix of the Markov
 chain, $\mathbf{R}^k$ the matrix of $k^{th}$ moments of the transition-specific rewards, $T$ the terminal time, and $\bm{\rho}^m(0)=0$.
 As $t \rightarrow \infty$, this formula converges to the lifetime rewards for any initial stage $i$ \citep{Caswell2011}.\\
@@ -65,31 +63,36 @@ See section \ref{sec:recursive_moment} of the Appendix for further details on th
 
 
 
-\cite{VanDaalen2017} exploit the formula \ref{moments} to obtain for the analytical solution for lifetime accumulated rewards:
+\cite{VanDaalen2017} exploit the formula \ref{moments} to obtain the analytical solution for lifetime accumulated rewards:
 \begin{equation}
      \Tilde{\bm{\rho}^m} = \mathbf{N}^T\mathbf{Z} (\mathbf{P} \circ \mathbf{R}_m)^T \bm{1}_s + \sum_{k=1}^{m-1} \binom{m}{k} \mathbf{N}^T \big( \mathbf{U} \circ \Tilde{\mathbf{R}}_{m-k})^T  \Tilde{\bm{\rho}}^k 
 \end{equation}
-where $\mathbf{N} = (\mathbf{I} - \mathbf{U})^{-1}$ is the fundamental matrix of the Markov chain\cite{Caswell2018}. See section \ref{sec:analytical_solution} in the Appendix for the algebraic computations and further details.
-From this general formula, one can compute various statistical properties as \cite{VanDaalen2015} suggest:
+where $\mathbf{N} = (\mathbf{I} - \mathbf{U})^{-1}$ is the fundamental matrix of the Markov chain \citep{Caswell2018}. See section \ref{sec:analytical_solution} in the Appendix for the algebraic computations and further details.
+From this general formula, one can compute various statistical properties as \citep{VanDaalen2015} suggest:\\
 
 
 \begin{table*}[h!]
 \centering
 \ra{1.3}
-\begin{tabular}{SS} \toprule
+\begin{tabular}{cc}
+\toprule
     {Statistical property} & {Formula} \\ \midrule
     Mean  & $\mathds{E}(\Tilde{\bm{\rho}}) = \Tilde{\bm{\rho}}^1$     \\
     Variance  & $V(\Tilde{\bm{\rho}}) =  \Tilde{\bm{\rho}}^2 - (\Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^1) $\\
-    Standard deviation &  $SD(\Tilde{\bm{\rho}}})   =  \sqrt{V(\Tilde{\bm{\rho}})}$  \\
-    Coefficient of variation &  $CV (\Tilde{\bm{\rho}}})   =  \text{diag} (\Tilde{\bm{\rho}}^1)^{-1} SD(\Tilde{\bm{\rho}}) $  \\ 
-    Skewness  &  $Sk( \Tilde{\bm{\rho}}) = \text{diag} [ V(\Tilde{\bm{\rho}})]^{-3/2} (\bm{\rho}^3 - 3 \Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^2 + 2\Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^1) $\\ 
+    Standard deviation &  $SD(\Tilde{\bm{\rho}})   =  \sqrt{V(\Tilde{\bm{\rho}})}$  \\
+    Coefficient of variation &  $CV (\Tilde{\bm{\rho}}) = \text{diag} (\Tilde{\bm{\rho}}^1)^{-1} SD(\Tilde{\bm{\rho}})$  \\ 
+    Skewness  &  $Sk( \Tilde{\bm{\rho}}) = \text{diag} [ V(\Tilde{\bm{\rho}})]^{-3/2} (\bm{\rho}^3 - 3 \Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^2 + 2\Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^1 \circ \Tilde{\bm{\rho}}^1)$\\ 
     \bottomrule
 \end{tabular}
-\caption{Formulas for computing the statistical properties of accumulated lifetime rewards}
+\caption{Statistical properties of accumulated lifetime rewards}
 \end{table*} 
 
 
-One important note on the second central moment of lifetime accumulated rewards is that the empirical measurements will reflect both individual stochasticity and heterogeneity among individuals. By \lq\lq individual stochasticity'' we mean the random variation \lq\lq among individuals that are all experiencing exactly the same age or stage-dependent vital rates" \citep{Caswell2015}. This is different from the genuine heterogeneity among individuals, i.e. differences in individuals' properties \citep{Hartemink2017a, Caswell2011}. For an example on how to separate these two sources of variation see \cite{Caswell2001, Caswell2014}.\\
+One important note on the observed variance of lifetime accumulated rewards is that the empirical measurements will reflect both individual stochasticity and heterogeneity among individuals. By \lq\lq individual stochasticity'' we mean the random variation \lq\lq among individuals that are all experiencing exactly the same age or stage-dependent vital rates" \citep{Caswell2015}. This is different from the genuine heterogeneity among individuals, i.e. differences in individuals' properties \citep{Hartemink2017a, Caswell2011}. For an example on how to separate these two sources of variation see \cite{Caswell2001, Caswell2014}.\\
+
+The coefficient of variation (CV) is a measure of relative variability. It is calculated as the ratio of the standard deviation to the mean. This is very helpful when we want to look at findings from different groups and we need to compare their relative variability (with respect to the mean).\\
+Finally, skewness can be described as a \lq\lq measure of lack of symmetry''. Indeed, a standard normal distribution is perfectly symmetrical and has zero skew. Intuitively, if the distribution has one tail that is longer than another, it is said to be skewed: a  long left tail will originate a \lq\lq left-skewed'' distribution, while a long right tail a \lq\lq right-skewed'' one.
+
 
 
 

@@ -16,16 +16,24 @@
 \usepackage{titlesec}
 \titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge\bf}
 
+% Spacing
+\titlespacing{\section}{0pt}{45pt}{10pt}
+\titlespacing{\subsection}{0pt}{45pt}{10pt}
+\titlespacing{\subsubsection}{0pt}{45pt}{10pt}
+
 % Paragraph
-\usepackage{titlesec}
 \setcounter{secnumdepth}{5}
-\titleformat{\paragraph}
-{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \usepackage{booktabs}
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+
+\usepackage[toc,page]{appendix}
+
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
 
 
 
@@ -55,6 +63,17 @@
 \bibliographystyle{abbrvnat}
 \setcitestyle{authoryear,open={(},close={)}}
 
+\usepackage{amsmath}
+\makeatletter
+\g@addto@macro\normalsize{%
+  \setlength\abovedisplayskip{20pt}
+  \setlength\belowdisplayskip{20pt}
+  \setlength\abovedisplayshortskip{20pt}
+  \setlength\belowdisplayshortskip{20pt}
+}
+\makeatother
+
+
 
  
 \title{MSc Thesis}
@@ -63,13 +82,14 @@
 
 \usepackage{hyperref}
 
-
+\usepackage{tocbibind}
  
 \begin{document}
 
 \baselineskip=25pt
 \maketitle
  
+\thispagestyle{empty}
 \tableofcontents
 \newpage
 
@@ -83,9 +103,8 @@
 
 \newpage
 \listoffigures
-
-\newpage
 \listoftables
+\newpage
  
 \end{document}
 

@@ -1,0 +1,219 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+
+
+
+\subsubsection{Example: the toy-maker \citep{Howard1960}}\label{toy-maker1}
+
+Here below I will summarise an example of a discrete-time finite-state Markov chain by \cite{Howard1960}.\\
+
+\begin{small}
+Imagine there is a toy-maker that invents new toys. Once she produces a new puppet, she can be in two states: the public likes the new toy (state 1) or the public does not like it (state 2). The toy-maker is observed every week. i.e. she is observed at equally spaced epochs $n = 0, 1,2,..$.
+Assume that her being in a given state only depends on the previous state. For instance, when she is in state 1 in week $n$, she will either remain in the same state 1 with probability $\mathds{P} = 1/2$ or move to state 2 with $\mathds{P} = 1/2$ in week $n+1$  . Conversely, if she is in state 2 in week $n$, she will either remain in the same state 2 with probability $\mathds{P} = 3/5$ or move to state 1 with $\mathds{P} = 2/5$ in week $n+1$. This transition probabilities can be collected in the transition matrix:
+
+
+\begin{equation*}
+\mathbf{P} =
+\begin{pmatrix}
+\frac{1}{2} &  \frac{1}{2}\\
+\frac{2}{5} &  \frac{3}{5}\\
+\end{pmatrix}
+\end{equation*}
+Note that this matrix is row-stochastic and the row entries sums to 1.\\
+
+With this model, we can answer many questions, e.g. \lq\lq what is the probability that the toy-maker is in state 1 after $n$ weeks have passed, if she starts in state 1?\\
+
+In order to answer to this and other questions, it is useful to define $\pi_i(n)$ as the probability that the Markov chain is in state $i$ after $n$ transitions, given that the initial state $\pi_i(0)$ is known. It follows that:
+
+\begin{equation}
+    \sum_{i=1}^{N} \pi_i(n) = 1
+\end{equation}
+and 
+
+\begin{equation}
+    \pi_{ij}(n+1) = \sum_{i=1}^{N}\pi_i(n) p_{ij}
+\end{equation}
+
+\noindent Extending this idea, we can define a row vector $\bm{\pi}(n)$ that collects the state probabilities $\pi_i(n)$, so that:
+\begin{equation}
+   \bm{\pi }(n+1)= \bm{\pi}(n) \mathbf{P}
+\end{equation}
+where $\bm{\pi}(n) = \lbrack \bm{\pi_1}(n) \; \bm{\pi_2}(n) \; \cdots \bm{\pi_N}(n) \rbrack$ 
+
+\noindent By recursion:
+\begin{equation}
+\begin{split}
+   \bm{\pi}(1)&= \bm{\pi}(0) \bm{P} \\ 
+   \bm{\pi }(2)&= \bm{\pi}(1) \bm{P} = \bm{\pi}(0) \bm{P}^2 \\ 
+   \bm{\pi }(3)&= \bm{\pi}(2) \bm{P} = \bm{\pi}(0) \mathbf{P}^3\\
+\end{split}
+\end{equation}
+and in the general case:
+\begin{equation}
+\begin{split}
+   \bm{\pi}(n)&= \bm{\pi}(0) \mathbf{P}^n \\ 
+\end{split}
+\end{equation}
+To solve the previous case of the toy-maker with this set up, we can proceed as follows:
+\begin{enumerate}
+    \item The toy-maker starts in state 1, so $\pi_1(0) = 1$ and $\pi_2(0) = 0$\\
+    and $\bm{\pi}(0) = \begin{bmatrix}
+    \pi_1(0) & \pi_2(0)\\
+  \end{bmatrix}
+ = \begin{bmatrix}
+    1 & 0\\
+  \end{bmatrix}$
+
+    \item $\bm{\pi}(1) = \bm{\pi}(0) \; \mathbf{P} = 
+  \begin{bmatrix}
+    1 & 0\\
+  \end{bmatrix}
+ \; \;   \begin{bmatrix}
+1/2 & 1/2\\
+2/5 & 3/5\\
+  \end{bmatrix} = \begin{bmatrix}
+    1/2 & 1/2\\
+  \end{bmatrix}$
+  \item $\bm{\pi}(2) = \bm{\pi}(1) \; \mathbf{P} = 
+  \begin{bmatrix}
+    1/2 & 1/2\\
+  \end{bmatrix}
+ \; \;
+ \begin{bmatrix}
+    1/2 & 1/2\\
+    2/5 & 3/5\\
+  \end{bmatrix} = \begin{bmatrix}
+    9/20 & 11/20\\
+  \end{bmatrix}$
+\end{enumerate}
+and so on.\\
+
+\noindent As we compute $\bm{\pi}(n)$ as a function of $n$ we observe:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 &$\cdots$ \\ 
+  \hline
+ $\pi_1(n)$ & 1& 0.5& 0.45& 0.445& 0.4445&0.44445 \\ 
+ $\pi_2(n)$  & 0 & 0.5  & 0.55&0.555 &0.5555&0.55555\\ 
+\end{tabular}
+\end{center}
+it appears that $\pi_1(n)$ converges to $4/9$ and $\pi_2(n)$ to $5/9$ as $n$ increases. When the toy-maker starts being successful, she has a slightly bigger probability to be unsuccessful in the long run.  \\
+
+\noindent Considering the opposite situation, i.e. the toy-maker starts being unsuccessful, we have:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 &$\cdots$ \\ 
+  \hline
+ $\pi_1(n)$ & 0& 0.4& 0.44& 0.444& 0.4444&0.44444 \\ 
+ $\pi_2(n)$  & 1 & 0.6  & 0.66 &0.556 &0.5556&0.55556\\ 
+\end{tabular}
+\end{center}
+Again, we find that $\pi_1(n)$ converges to $4/9$ and $\pi_2(n)$ to $5/9$ as $n$ increases. In other words, the probability of being in a given state appears to be independent from the initial state, if $n$ is large. Any Markov chain that satisfies this property is said to be \textit{ergodic}. See \cite{Howard1960} (p.7) for further details about solving the system of linear equation to find the limiting state probabilities for any process.
+
+\end{small}
+
+
+\subsubsection{Example, con't: the toy-maker \citep{Howard1960}}
+
+The following is taken from \cite{Howard1960} p.19:
+
+
+\begin{small}
+Let us add a reward structure to the toy-maker problem investigated in section \ref{toy-maker1}, for instance:
+\begin{enumerate}
+    \item if the process starts in state 1 and transits to state 1 in the next period, the reward is equal to 9 dollars
+     \item if the process starts in state 2 and transits to state 2 in the next period, the reward is equal to -7 dollars
+      \item if the process starts in state 1(2) and transits to state 2(1) in the next period, the reward is equal to 3 dollars
+\end{enumerate}
+The different rewards can be collected in a reward matrix $\mathbf{R}$.
+\begin{equation}
+\mathbf{R} = 
+\begin{bmatrix}
+r_{11} & r_{12}\\
+r_{21} & r_{22}\\
+\end{bmatrix} =
+\begin{bmatrix}
+9 & 3\\
+3 & -7\\
+\end{bmatrix}
+\end{equation}
+From section \ref{toy-maker1} we have:
+\begin{equation}
+\mathbf{P} = 
+\begin{bmatrix}
+0.5 & 0.5\\
+0.4 & 0.6\\
+\end{bmatrix}
+\end{equation}
+and so we can find the vector of expected immediate rewards:
+\begin{equation}
+    \mathbf{q} = 
+    \begin{bmatrix}
+    q_1\\
+    q_2
+    \end{bmatrix} =
+    \begin{bmatrix}
+    \sum_{j=1}^N p_{1j}r_{1j} = p_{11}r_{11} + p_{12}r_{12}\\
+    \sum_{j=1}^N p_{2j}r_{2j} = p_{21}r_{21} + p_{22}r_{22}\\
+    \end{bmatrix}=
+     \begin{bmatrix}
+    0.5*9 + 0.5*3\\
+    0.4*3 - 0.6*7
+    \end{bmatrix}=
+     \begin{bmatrix}
+    6\\
+    -3
+    \end{bmatrix}
+\end{equation}
+the vector $\mathbf{q}$ tells us that the toy-maker expects to make 6 dollars the next week if she starts with a successful toy while she expects a loss of 3 dollars, if she starts with an unsuccessful one.\\
+
+\noindent From this we can compute $v_i(n)$ as a function of n. Recall:
+
+\begin{equation}
+    v_i(n) = q_i + \sum_{j=1}^N p_{ij}v_j(n-1) 
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+     v_1(0) &= 0\\ 
+     v_2(0) &= 0 
+\end{split}
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+     v_1(1) &= q_1 + (p_{11}v_1(0) +p_{12}v_2(0) = 6  \\ 
+     v_2(1) &= q_2 + (p_{21}v_1(0) +p_{22}v_2(0) = -3
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+     v_1(2) &= q_1 + (p_{11}v_1(1) +p_{12}v_2(1) = 7.5  \\ 
+     v_2(2) &= q_2 + (p_{21}v_1(1) +p_{22}v_2(1) = -2.4
+\end{split}
+\end{equation}
+
+\noindent As we continue computing the recursive formula, we obtain the following:
+
+\begin{center} 
+\begin{tabular}{ c|c|c|c|c|c|c|c  } 
+ n & 0 & 1 & 2 & 3& 4 & 5 & \\ 
+ \hline
+ $v_1(n)$ & 0& 6& 7.5& 8.55& 9.555&10.5555 \\ 
+ $v_2(n)$  & 0 & -3  & -2.4 & -1.44 &-0.444 & 0.5556\\ 
+\end{tabular}
+\end{center}
+
+The asymptotic behaviour of the process suggests that having a successful toy is worth 10 dollars more than having an unsuccessful product, since $v_1(n) - v_2(n)$ approaches 10 as $n$ increases. Moreover, an additional week seems to increase profit by  1 dollar in each case: both $v_1(n) - v_1(n-1)$ and $v_2(n) - v_2(n-1)$ approach 1. For instance, after 5 weeks the toy-maker expects to make 10.5 dollars of profit if she now has a successful toy and 0.5 dollars if she instead has an unsuccessful one.
+\end{small}
+
+
+
+\end{document}

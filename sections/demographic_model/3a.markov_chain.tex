@@ -9,20 +9,19 @@
 A Markov chain (MC) is a special type of stochastic processes  $  \{ X_t, t \in T\}$ where $X_{t+1}$ depends only on $X_{t}$ , i.e. \lq\lq the probability of the next random outcome depends on the present realisation but it is independent of the past'' \citep{Grinstead1997}. 
 More precisely, given the present state of the random process, the conditional probability of the next state depends on the present state but it is independent of previous states.\\
 In other words, \lq\lq only the most recent point in the trajectory affects what happens next'' \citep{Holmes2015}. Formally, a Markov chain is defined as \lq\lq an indexed sequence of random variables, $\{X_0, X_1, X_2, ...\}$ that satisfies the Markov property'' \citep{Sheskin2010}:
-
 \begin{equation}
 \begin{split}
      & \mathds{P} \big(X_{t+1} = s |X_t = s_t, X_{t-1} = s_{t-1}, . . . , X_0 = s_0\big) = 
      \mathds{P} \big(X_{t+1} = s |X_t = s_t\big)\\
     & \text{for all} \; t = 1, 2, 3, ... \; \text{and for all states} \; s_0, s_1, . . . , s_t, s.\\
 \end{split}
-\end{equation}\\
+\end{equation}
 Usually, $t$ usually denotes time, meaning that, at every time $t$ in the set $T$, a realisation of the random variable $X_t$ is observed.
 Some authors use an equivalent notation $\{X_n, n \in N\}$, where the index $t$ is replaced by $n$.\\
 
 
 Markov chain models were introduced in the early 20th century by the Russian mathematician A. A. Markov \citep{Hayes2013}. In the United States, these models began to gain popularity from the 1950's, when both academia - see, for instance, \cite{Feller1950}, \cite{Howard1960}, and \cite{Kemeny1960} - and mathematicians at the RAND Corporation in California started investigating theory and applications of Markov decision processes \citep{Sheskin2010}. Markov chains have now been applied to a variety of problems such as Markovian queueing systems, webpage ranking, inventory control, customer lifetime values. \cite{Ching2006} provide an overview and some practical examples of the many fields of application of such models.
-See instead \cite{Karlin1975} for a detailed discussion of stochastic process and Markov chains. \\
+See instead \cite{Karlin1975} for a detailed discussion of stochastic process and Markov chains. 
 
 
 
@@ -84,7 +83,6 @@ In order to compute the transition probabilities of a Markov chain, we can imagi
 Let $\mathds{P}(X_t = i)$ be the probability that the Markov chain is in state $i$ at epoch $t$ and let $\mathds{P}(X_{t+1} = j)$ be the probability that the Markov chain will be in state $j$ in the next epoch $t+1$. Define $\mathds{P}(X_{t+1}
 = j|X_{t} = i)$ as the conditional probability of the Markov chain, i.e. the probability that the process will be in state $j$ at epoch $t + 1$, given that it is in state $i$ at epoch $t$. 
 This conditional probability is called the \textit{transition probability} and it is typically denoted by $p_{ij}$ \citep{Sheskin2010}. Note that $p_{ij}$  refers to the the probability of moving from state $i$ to state $j$ in \textit{one step}:
-
 \begin{equation}
     p_{ij} = \mathds{P}(X_{t+1} = j |X_t = i) \; \; \text{for}\; \; i,j \in S, \; \; t=0,1,2,...
 \end{equation}
@@ -95,7 +93,7 @@ Without loss of generality, assume that the state space has $N$ elements, $S=\{1
  Moreover, the $p_{ij}$ are probabilities and therefore:
 \begin{equation}
  0 \leq p_{ij} \leq 1
-\end{equation}\\
+\end{equation}
 
 A typical assumption is that the transition probabilities are \textit{stationary} over time (or \textit{time homogeneous)} meaning that they do not change over time \citep{Sheskin2010}:
 \begin{equation}
@@ -103,13 +101,11 @@ A typical assumption is that the transition probabilities are \textit{stationary
 \end{equation}
 
 \subsubsection{One-step transition probabilities}
-\noindent The one-step transition probabilities represent the probability of making a transition from state $i$ to state $j$ in one single step. They are collected in the the transition matrix $\mathbf{P}$:
-
-
+\noindent The one-step transition probabilities represent the probability of making a transition from state $i$ to state $j$ in one single step. They are collected in the transition matrix $\mathbf{P}$:
 \begin{equation}
    \mathbf{P} = \Big([ p_{ij}] \Big)
 \end{equation}
-where
+where:
 \begin{equation}
     p_{ij} = \mathds{P} ( X_{t+1} = j | X_t = i) \;\;\; \forall \; i,j \in S
 \end{equation}
@@ -119,7 +115,6 @@ where
 \noindent The two-step transition probabilities $p_{ij}^2$ represent the probability of making a transition from state $i$ to state $j$ in two steps. To calculate a two-step transition probability one can reason as follows \citep{Sheskin2010}: $p_{ij}^2$ is the conditional probability of going from state $j$ to state $i$ in two steps, i.e. passing through an intermediate state $k$, where $k$ can be any of the states of the Markov chain. Thus, the $p_{ij}^2$ can be computed as the product of a first and second transition probability: the first transition is from state $i$ to state $k$ and the second is from state $k$ to $j$. Since the value of $k$ is unknown, we have to sum over all the possible state of $k$. This idea relies on the law of total probability. See \cite{Zwillinger2000} for further details.
 
 To make a simple example, suppose the state space of the Markov chain is $S = \{ 1,2,3\}$. Then, we have:
-
 \begin{equation}
     p_{ij}^2 = p_{i1}p_{1j} + p_{i2}p_{2j} + p_{i3}p_{3j} = \sum_k p_{ik}p_{kj}
 \end{equation}
@@ -162,7 +157,7 @@ p_{11}p_{11} + p_{12}p_{21} + p_{13}p_{31} & \cdots \\
 \end{bmatrix} = 
 \mathbf{P}^{(2)} 
 \end{split}
-\end{equation}\\
+\end{equation}
 
 
 
@@ -170,27 +165,15 @@ p_{11}p_{11} + p_{12}p_{21} + p_{13}p_{31} & \cdots \\
 \subsubsection{T-step transition probabilities }
 
 The idea for the two-step transition matrix can be shown to extend to the more general case, see \citep{Sheskin2010} or \cite{Holmes2015} for a proof. In general, the t-step transition matrix is obtained as the  $t^{th}$ power the one-step transition matrix and collects the t-step transition probabilities:
-
 \begin{equation}
     \mathbf{P}^{(t)} = \mathbf{P}^t
 \end{equation}
 
 
 
-
-
-
-
-
-
-
-
-
-
-\subsection{Transition probabilities of a trajectory}
+\subsection{Computing the transition probabilities of a trajectory}
 
 \noindent As we have seen, Markov chains evolve over time and \lq\lq visit'' a sequence of states, thereby originating a \lq\lq trajectory''. The probability of such trajectory, e.g. $X_0 = a, X_1 = b, X_2 = c$ is a joint probability that can be computed taking into account the Markov property:
-
 \begin{equation}
 \begin{split}
    &\mathds{P}(X_0 = a, X_1 = b, X_2 = c) =\\
@@ -204,7 +187,7 @@ where $p_a$ represent the probability that the initial state is equal to $a$. Si
    &\mathds{P}(X_0 = a, X_1 = b, X_2 = c) =\\
    =\; &p_{ab}\; p_{bc}
 \end{split}
-\end{equation}\\
+\end{equation}
 
 
 
@@ -215,7 +198,7 @@ where $p_a$ represent the probability that the initial state is equal to $a$. Si
 
 
 
-\subsection{Transition diagrams and matrices}
+\subsection{Transition diagrams and transition matrices}
 
 Markov chains can be described through a transition diagram or a transition matrix.
 
@@ -244,8 +227,6 @@ Much of the literature on Markov chains considers row-stochasticity (i.e. the pr
 
 
 Assuming there are $s$ states, the transition matrix of the Markov chain becomes:
-
-
 \begin{equation}
     \mathbf{P} = \begin{pmatrix}
         \mathbf{U} &  \mathbf{0}\\
@@ -254,7 +235,6 @@ Assuming there are $s$ states, the transition matrix of the Markov chain becomes
 \end{equation}
 
 where $\mathbf{U}$ is the transient matrix that collects the transition probabilities from one age class to the next. For example, considering three age classes, i.e. $s = 3$, $\mathbf{U}$ might be:
-
 \begin{equation}
     \mathbf{U}= \begin{pmatrix}
     0 & 0 & 0\\
@@ -265,7 +245,7 @@ where $\mathbf{U}$ is the transient matrix that collects the transition probabil
 
 where $ u_{12}$ represents the probability of moving from age class 1 to age class 2, $ u_{23}$ from age class 2 to age class 3, and $ u_{33}$ the probability of remaining in age class 3.\\
 $ \mathbf{m}^T$ is the transpose (i.e. a row vector) of the column vector $\mathbf{m}$ that collects the mortality rates, with $m_{ij} = 1 - \sum_{j} u_{ij}$. 
-Given this simple Markov chain, the corresponding matrix $\mathbf{P}$ will be:
+In the above example, the corresponding matrix $\mathbf{P}$ will be:
 \begin{equation}
     \mathbf{P}= \begin{pmatrix}
     0 & 0 & 0 & 0\\
@@ -284,7 +264,6 @@ with dimensions:
 
 \noindent Note that the matrix has a column-to-row orientation and that $\mathbf{P}$ is column-stochastic, i.e. it is a square matrix with the entries in each of its columns that add up to 1 \citep{Poole1995}. 
 The same model could be extended by replacing the vector $\mathbf{m}^T$ with the matrix $\mathbf{M}$, thus including more absorbing states such as different causes of death:
-
 \begin{equation}\label{matrixmodel}
     \mathbf{P} = \begin{pmatrix}
         \mathbf{U} &  0\\

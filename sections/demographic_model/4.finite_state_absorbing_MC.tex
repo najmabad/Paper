@@ -6,17 +6,14 @@
 
 \section{Set up of the model}
 \subsection{A discrete-time, finite-state, and absorbing\\ Markov Chain model}
+The model of this empirical investigation aims at representing the life-cycle of individuals which, by growing older, can move through two different health conditions, before eventually dying.
 
-The demographic model underlying this analysis is a Markov chain with rewards $\{X_0, X_1, ...\}$ characterised by:
-\begin{enumerate}
-\item discrete-time (i.e. $T = \{ 0,1,2,..\}$);
-\item two absorbing states which represent two possible causes of death (i.e.  the probability of dying from a healthy or unhealthy condition) and that can be reached in a finite number of steps ;
-\item a finite set of discrete and mutually exclusive spaces $S = \{s_1, s_2, ..., s\}$, where $\tau$ transient states and $\alpha$ the absorbing ones.
-\end{enumerate}
-The model applies a discrete time framework because the data are presented in discrete time, i.e. with a scanning that occurs nearly every two years. This does not mean that transitions can occur only at integer time, but it is due to the form in which that data is presented \citep{haberman1999}.\\
-Rewards are \lq\lq years of healthy/unhealthy life'': each individual evolves through the life cycle and, at each step, collects a reward, which can either be a \lq\lq year of healthy life'', if the individual moves from one age class to the next without developing any functional limitation, or a \lq\lq year of disabled life'', if some activities are instead limited \citep{Caswell2018}. 
+The demographic model is therefore set up as a Markov chain with rewards $\{X_0, X_1, ...\}$ characterised by discrete-time (i.e. $T = \{ 0,1,2,..\}$) and a finite set of discrete and mutually exclusive spaces $S = \{s_1, s_2, ..., s\}$, with $\tau$ transient states and $\alpha$ the absorbing ones. Individuals are categorised according to their age, with $\tau$ representing the age classes. Moreover, $\alpha = 2$ represents the two possible causes of death (i.e. the probability of dying from a healthy or unhealthy condition).\\ 
+Note that model applies a discrete time framework because the data are presented in discrete time, i.e. with a scanning that occurs nearly every two years. We are not assuming that transitions (from healthy to disabled state, or vice-versa) can happen at integer time: the choice of a discrete set $T$ is due to the form in which that data is presented, as suggested by \cite{haberman1999}.\\
+
+Following the approach of \cite{Caswell2018}, rewards are defined as \lq\lq years of healthy/unhealthy life'' : each individual evolves through the life cycle and, at each step, collects a reward, which can either be a \lq\lq year of healthy life'', if the individual moves from one age class to the next without developing any functional limitation, or a \lq\lq year of disabled life'', if some activities are instead limited \citep{Caswell2018}. \\
+
 The transition matrix $\mathbf{P}$ of the Markov chain is set up as:
-
 \begin{equation}
     \mathbf{P} = 
     \begin{bmatrix}
@@ -24,10 +21,10 @@ The transition matrix $\mathbf{P}$ of the Markov chain is set up as:
     \mathbf{M} & \mathbf{I}\\
     \end{bmatrix}
     \end{equation}
-where $\mathbf{M}$  is the matrix of mortality of dimension $2 \times s$, with the two rows representing the probability of dying from a healthy or unhealthy condition respectively and the matrix $\mathbf{P}$ has dimension $(s \times s)$ \citep{Caswell2018a}.
+where $\mathbf{M}$  is the matrix of mortality of dimension $2 \times s$, with the two rows representing the probability of dying from a healthy or unhealthy condition respectively and the matrix $\mathbf{P}$ has dimension $(s \times s)$ \citep{Caswell2018}.
 
-The framework of Markov chain with rewards presented by \cite{Caswell2018} works with health outcomes presented in various scales, e.g. nominal, ordinal, intervals. In this setting, we will consider a nominal binary status, i.e. \lq\lq being healthy'' vs \lq\lq being disabled'', which is coded in SHARE as the variable \lq\lq adla''.
-We will use prevalence data, with $\nu_i$ being the prevalence of disability in the age class $i$. Rewards are modelled as a Bernoulli random variable:
+The framework of Markov chain with rewards presented by \cite{Caswell2018} can accommodate different types of health outcomes, e.g. presented in a nominal, ordinal, or interval scale. In this setting, we will consider a nominal binary status, i.e. \lq\lq being healthy'' vs \lq\lq being disabled'', which is coded in the SHARE dataset as the variable \lq\lq adla''.
+We will use prevalence data, with $\nu_i$ being the prevalence of disability in the age class $i$. In this framework, rewards are modelled as Bernoulli random variables:
 
 \begin{equation}
   r_{ij} = \begin{cases}
@@ -35,13 +32,12 @@ We will use prevalence data, with $\nu_i$ being the prevalence of disability in 
         0, & \text{with probability } 1-\nu_j\\
         \end{cases}
 \end{equation}
-with $\nu_j$ being the probability of gaining a reward while moving from age class $i$ to age class $j$. In this case, the series of rewards matrices $\mathbf{R}^k$ will all be equal to one another: $\mathbf{R}^1= \mathbf{R}^2 =\mathbf{R}^3, ..$. This is because the $\mathbf{R}^k$ collects the $k^{th}$ moment of the $r_{ij}$, which are all equal to the probability of success $p$  for a random variable that has Bernoulli distribution \citep{forbes2011}. 
+with $\nu_j$ being the probability of gaining a reward while moving from age class $i$ to age class $j$. In this case, the series of rewards matrices $\mathbf{R}^k$ will all be equal to one another: $\mathbf{R}^1= \mathbf{R}^2 =\mathbf{R}^3 = ..$. This is because the $\mathbf{R}^k$ collects the $k^{th}$ moment of the $r_{ij}$, which are all equal to the probability of success $p$  for a random variable that has Bernoulli distribution \citep{forbes2011}. 
 
 
 
 Moreover, it is assumed that the dominant eigenvalue of $\mathbf{U}$ is less than one so that any individual starting in any transient state will eventually be absorbed (i.e. die) with probability 1 \citep{Caswell2011}.
-
-
-Assume that all moments are moments around zero \citep{Caswell2018} \textcolor{red}{why?}. 
+\textcolor{red}{why?}.
+When modelling healthy longevity, it is useful to centre all the moments around zero and to assume that rewards accumulated over time and stops at death \citep{Caswell2018}.\textcolor{red}{why?}.\\
 
 \end{document}
