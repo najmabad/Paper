@@ -1,0 +1,49 @@
+
+%\providecommand{\main}{..}
+%\documentclass[\main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{Prevalence data}
+
+There exist at least two alternative approaches to compute the frequency at which a given disease occurs. The first one consists in computing the \textit{incidence proportion}, i.e. a measure of the proportion of people developing the new disease in a given period of time. Alternatively, one can compute the \textit{prevalence proportion} which instead measures the proportion of people who have disease at a specific time. In other words, prevalence focuses on existing states while incidence focuses on the new events or changes over a specific time horizon \citep{Rothman2008ModernEpidemiology}.\\
+
+
+In this paper, we will employ prevalence data, following \cite{Caswell2018}'s methodology. However, given the panel nature of the SHARE dataset, one could extend the model and compute incidence proportion as well. \\
+
+Three important remarks with respect to prevalence proportion are that (1) 
+when people recover from the disease or emigrate, the prevalence pool (i.e. the subset of the population that present the condition or has developed the given disease) decreases and, as a consequence, prevalence proportion also goes down, (2) diseases which have a very high incidence rate and are either fatal or quickly cured, may result in low prevalence proportion, and (3) similarly, diseases which have a very low incidence rate and are non-fatal but incurable might result in very high prevalence estimates. \\
+
+
+As for the first point, we have excluded in-migration from our dataset but we cannot exclude out-migration, i.e. some people might migrate or drop out of the study after being interviewed. Moreover, SHARE exclude from the eligible population all those residents who have been hospitalized \citep{Bergmann2017}. Therefore, we are probably underestimating the prevalence proportion if people with disabilities are more likely to die, thus reducing the prevalence pool, or to be hospitalised. In addition, SHARE do not use specific sampling methods for those persons living in nursing homes and other institutions for elderly but includes them as part of the general population sample, which might result in an
+under-coverage of this sub-population. 
+For all these reasons, our estimates are probably an underestimation of the true prevalence proportion and are unlikely to be representative at country level.\\
+
+As for the second and third point, the definition \lq\lq disability'' we are considering, which typically naturally results from the process of ageing, is likely to be non-fatal but incurable, which in turn could result in a higher prevalence estimates. \\
+
+Since the possible errors resulting from fact (1) and (3) go in opposite direction, it is difficult to assess which one is prevailing and therefore we are going to interpret the results with care. \\
+
+
+
+
+
+
+
+
+A very intuitive way of computing the incidence proportion is by taking a simple average of the individual proportions \citep{Rothman2008ModernEpidemiology}.  For example, one could count the individual incident proportion as 1 for those people who are in a healthy status and as 0 for those individuals who are disabled. Let us call $\nu_i$ the prevalence in age class $i$ of the health state of interest (in this case is \lq\lq being in a healthy status'') and $a_i$ the individual proportion. $\nu_i$ could be computed as:
+
+\begin{equation}
+    \nu_i = \frac{\sum_{j} a_j }{n_i} \;\;\; \forall j \in i
+\end{equation}
+
+where $n_i$ denotes the size of the age class $i$.\\
+This formulation shows that incidence proportion can be interpreted as an \lq\lq average risk'' in the age class. Notice that the incidence proportion ignores the amount of person-time contributed by individuals but it has a very intuitive interpretation.\\
+One last remark is that the value of an incidence proportion goes from 0 to 1 and is dimensionless. 
+
+
+
+
+
+
+\end{document}
