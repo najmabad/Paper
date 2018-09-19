@@ -49,10 +49,10 @@ We can compute the first moment of lifetime accumulated rewards for such individ
         \mathds{E}[ \rho_i(t) | i \rightarrow j] = \mathds{E}[ r_{ij} + \rho_j(t-1) ]
     \end{equation}
 
-In other words, the expected total rewards at time $t$, for an individual that starts from state $i$ and ends in any state $j$, can be thought as the reward $r_{ij}$ that she gains while moving from state $i$ to state $j$ plus the expected gain she could gain at time $t-1$ if she started in state $j$. Since $j$ is unknown, we sum over each possible state $j = 1,2, ...N$, i.e. including state $i$.
+In other words, the expected total rewards at time $t$, for an individual that starts from state $i$ and ends in any state $j$, can be thought as the reward $r_{ij}$ that she gains while moving from state $i$ to state $j$ plus the expected gain she could gain at time $t-1$ if she started in state $j$. Since $j$ is unknown, we sum over each possible state $j = 1,2, ...N$, including state $i$.
     
     
-From the conditional expectation, we can retrieve the unconditional one using the law of iterated expectations and the fact that we are dealing with a partition of the sample space: \lq\lq Let X be a random variable with sample space $\Omega$. If the events $F_1, F_2, ..., F_n$ form a partition of the sample space, i.e $F_i \cap F_j = \emptyset \; \text{for} \; i \neq j$ and $\cup_i F_i = \Omega$, then:
+From the conditional expectation, we can retrieve the unconditional one using the law of iterated expectations and the fact that we are dealing with a partition of the sample space. The law of iterated expectations states the following \lq\lq Let X be a random variable with sample space $\Omega$. If the events $F_1, F_2, ..., F_n$ form a partition of the sample space, i.e $F_i \cap F_j = \emptyset \; \text{for} \; i \neq j$ and $\cup_i F_i = \Omega$, then:
 \begin{equation}
 \mathds{E} (X) = \sum_j \mathds{E}(X | F_j) P(F_j)
 \end{equation}
@@ -354,7 +354,7 @@ Summarising the above results, we have that the first, second, and third moments
       \bm{\rho}^2(t+1) &= (\mathbf{P} \circ \mathbf{R}^2) ^ T\mathbf{1} + 2 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^1(t) + 
       \mathbf{P}^T \bm{\rho}^2(t) \\
      \bm{\rho}^3(t+1) &= (\mathbf{P} \circ \mathbf{R}^3) ^ T\mathbf{1} + 3 (\mathbf{P} \circ \mathbf{R}^2) ^T \bm{\rho}^1(t) + 3 (\mathbf{P} \circ \mathbf{R}^1) ^T \bm{\rho}^2(t) + \mathbf{P}^T \bm{\rho}^3(t) \\
-\end{split}\ref{sec:backward_solution}
+\end{split}
 \end{equation}for $t=0, ... ,T$ and with $\bm{\rho}^1(0) = 0, \bm{\rho}^2(0) = 0,\bm{\rho}^3(0) = 0$.\\
 Generalising, this is equal to:
 \begin{equation}\label{recursive}
@@ -508,7 +508,7 @@ Note that $\mathbf{Z} \mathbf{P}^T \mathbf{Z}^T = \mathbf{U}^T $ and $ \mathbf{Z
 \end{split}
     \end{equation}
 
-It can be proved \textcolor{red}{where?} that \citep{Caswell2009}:
+It can be proved that \citep{Caswell2009}:
 \begin{equation}
     (\mathbf{I} - \mathbf{U})^{-1} = \sum_{t=0}^\infty \mathbf{U}^t = \big( \mathds{E} (\nu_{ij}) \big) = \mathbf{N}
 \end{equation}
@@ -650,7 +650,38 @@ m_{14} & m_{24} & m_{34}& 1\\
      \end{split}
  \end{equation}
 
- \textcolor{red}{check}
- Non mi torna il trasposto che Caswell usa nella sua formula. Inoltre, $\Tilde{\mathbf{R}}_{m-k }$ non ha più l'ultima colonna, mentre per i vettori si elimina l'ultima riga. E' questa la definizione di $\Tilde{}$ (diversa per vettori e matrici)?
 
+
+
+
+
+\begin{newpage}
+
+
+
+
+\subfile{sections/empirical_analysis/7.results_full}
+
+
+
+\chapter{Source code}
+
+
+\section{Data cleaning and set up}
+
+
+
+\subfile{sections/codes/data_manager}
+
+
+\newpage
+
+\section{Healthy and unhealthy longevity}
+
+
+
+\subfile{sections/codes/estimates}
+
+
+\end{newpage}
 \end{document}

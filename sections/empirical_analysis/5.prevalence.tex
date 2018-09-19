@@ -5,24 +5,22 @@
 
 \begin{document}
 
-\section{Prevalence data}
+\section{Constructing the R matrix}
 
 There exist at least two alternative approaches to compute the frequency at which a given disease occurs. The first one consists in computing the \textit{incidence proportion}, i.e. a measure of the proportion of people developing the new disease in a given period of time. Alternatively, one can compute the \textit{prevalence proportion} which instead measures the proportion of people who have disease at a specific time. In other words, prevalence focuses on existing states while incidence focuses on the new events or changes over a specific time horizon \citep{Rothman2008ModernEpidemiology}.\\
 
 
-In this paper, we will employ prevalence data, following \cite{Caswell2018}'s methodology. However, given the panel nature of the SHARE dataset, one could extend the model and compute incidence proportion as well. \\
+In this paper, we will use prevalence data, following \cite{Caswell2018}'s methodology. However, given the panel nature of the SHARE dataset, one could extend the model and compute incidence proportion as well. \\
 
-Three important remarks with respect to prevalence proportion are that (1) 
-when people recover from the disease or emigrate, the prevalence pool (i.e. the subset of the population that present the condition or has developed the given disease) decreases and, as a consequence, prevalence proportion also goes down, (2) diseases which have a very high incidence rate and are either fatal or quickly cured, may result in low prevalence proportion, and (3) similarly, diseases which have a very low incidence rate and are non-fatal but incurable might result in very high prevalence estimates. \\
+Three important remarks with respect to prevalence proportion are that (i) 
+when people recover from the disease or emigrate, the prevalence pool (i.e. the subset of the population that presents the condition or has developed the given disease) decreases and, as a consequence, prevalence proportion also goes down, (ii) diseases which have a very high incidence rate and are either fatal or quickly cured, may result in low prevalence proportion, and (iii) similarly, diseases which have a very low incidence rate and are non-fatal but incurable might result in very high prevalence estimates. \\
 
 
-As for the first point, we have excluded in-migration from our dataset but we cannot exclude out-migration, i.e. some people might migrate or drop out of the study after being interviewed. Moreover, SHARE exclude from the eligible population all those residents who have been hospitalized \citep{Bergmann2017}. Therefore, we are probably underestimating the prevalence proportion if people with disabilities are more likely to die, thus reducing the prevalence pool, or to be hospitalised. In addition, SHARE do not use specific sampling methods for those persons living in nursing homes and other institutions for elderly but includes them as part of the general population sample, which might result in an
+As for the first point, we have excluded in-migration from our dataset but we cannot exclude out-migration, i.e. some people might migrate or drop out of the study after being interviewed. Moreover, SHARE exclude from the eligible population all those residents who have been hospitalised \citep{Bergmann2017}. Therefore, we are probably underestimating the prevalence proportion if people with disabilities are more likely to die, thus reducing the prevalence pool, or to be hospitalised. In addition, SHARE does not use specific sampling methods for those persons living in nursing homes and other institutions for elderly but includes them as part of the general population sample, which might result in an
 under-coverage of this sub-population. 
-For all these reasons, our estimates are probably an underestimation of the true prevalence proportion and are unlikely to be representative at country level.\\
-
-As for the second and third point, the definition \lq\lq disability'' we are considering, which typically naturally results from the process of ageing, is likely to be non-fatal but incurable, which in turn could result in a higher prevalence estimates. \\
-
-Since the possible errors resulting from fact (1) and (3) go in opposite direction, it is difficult to assess which one is prevailing and therefore we are going to interpret the results with care. \\
+For all these reasons, our estimates are probably an underestimation of the true prevalence proportion.\\
+As for the second and third point, we are considering a definition of \lq\lq disability'' that naturally results from the process of ageing and is likely to be non-fatal but incurable.  This in turn could result in a higher prevalence estimate. \\
+Given that the possible errors resulting from point (i) and (iii) go in opposite direction, it is difficult to assess which one is prevailing. This should be borne in mind when interpreting the results. \\
 
 
 
@@ -39,7 +37,11 @@ A very intuitive way of computing the incidence proportion is by taking a simple
 
 where $n_i$ denotes the size of the age class $i$.\\
 This formulation shows that incidence proportion can be interpreted as an \lq\lq average risk'' in the age class. Notice that the incidence proportion ignores the amount of person-time contributed by individuals but it has a very intuitive interpretation.\\
-One last remark is that the value of an incidence proportion goes from 0 to 1 and is dimensionless. 
+One last remark is that the value of an incidence proportion goes from 0 to 1 and is dimensionless. \\
+
+Ideally, we would like to construct as many R matrices as the groups in which we have partitioned our dataset, i.e. we would like to end up with a separate reward matrix for each country, income, and gender.
+However, due to the information contained in the dataset, we had to follow a less precise strategy and compute a unique matrix for all countries together and differentiate only for income deciles (our main variable of interest) and gender. \\
+We followed this strategy because the additional partition by country yielded very small sample sizes, with many age class in which we observed at most one or two individuals with disabilities (if any). This clearly was producing totally noisy estimates. Therefore, we decided to accept, in this setting, the above approximation and leave a more precise investigation to future studies. 
 
 
 

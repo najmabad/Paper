@@ -1,0 +1,136 @@
+
+
+%\providecommand{\main}{..}
+%\documentclass[\main/main.tex]{subfiles}
+
+
+\begin{document}
+
+
+\chapter{An example of application: inequality indices}
+
+\section{The Gini and Theil Index}
+
+There is a vast amount of economic literature on
+measures of income inequality within and across societies.  The Gini coefficient (1912), based on the Lorenz curve (1905), is probably one of the best-known and most frequently used indicator.\\
+
+
+In order to construct a Lorenz curve, total population
+is arranged from the poorest to the richest (on the horizontal
+axis) and the percentages of income enjoyed by
+the bottom x\% of the population is represented on the
+vertical axis. The Lorenz curve starts at the point (0,0)
+and ends at (1,1), since 0\% of the population enjoys
+0\% of the income and 100\% of the population enjoys 100\% of the total income.\\
+In a situation of perfect equality, where
+everyone receives the same income, the Lorenz curve is equal to the 45 degree line while, as income inequality increases, the curve assumes an exponential shape, with the bottom income groups enjoying a proportionately lower share of income \citep{Sen1973}.\\
+
+
+
+
+A common definition of the Gini coefficient is
+as the ratio of the difference between the line of absolute
+equality (the diagonal of the square) and the
+Lorenz curve represented, divided by the whole area
+below the diagonal (equal to 1/2). A more intuitive
+way of understanding this index is as the expected difference
+between two incomes drawn at random (with
+replacement), divided by twice the mean income. Analytically,
+this corresponds to one-half of the average
+of the absolute values of differences between all pairs
+of incomes:
+
+
+\begin{equation}
+    G(x) = \frac{1}{2n^2 \mu} \sum_{i=1}^{n}\sum_{j=1}^{n} | x_i - x_j | 
+\end{equation}
+where $x_i$ represents the income of individual $i$.\\
+
+One major problem of the Gini index is that it does not take into account the underlying distribution of income as different Lorenz curves may correspond to the same Gini index. \cite{Adeline2016SomeIncome} explain the above problem with the following example: \lq\lq if 50 percent of the population has no income and the other half has the same income,
+the Gini index is 0.5. The same result can be found with the following analysis which is less unequal. On one hand, 25 percent of total income is shared in the same way by 75 percent of the population, and on the other hand, the remaining 25 percent of the total income is divided by the remaining 25 percent of the
+population". This means that the Gini coefficient does not differentiate between inequalities in low-income group and high income ones. \\
+
+One possible solution is to use another measure, such as the Theil index which measures the \lq\lq distance'' of the real population from the \lq\lq ideal'' egalitarian state where everyone has the same income. The Theil index is formally defined as:
+
+\begin{equation}
+    T(x) = \frac{1}{N} \sum_{i} \frac{y_i}{\Bar{y}} ln ( \frac{y_i}{\Bar{y}})
+\end{equation}
+
+where $\Bar{y}$ is the mean income per capita. It is also possible to normalise the Theil index to vary between zero and one, by dividing it by $ln(N)$. \\
+
+
+\section{Empirical Application}
+
+In order to quantify inequality in life expectancy taking into account differential in healthy longevity, we compute both the Gini Index and the Theil Index on our projected values. \\
+As a benchmark, we first computed the two indices on the total population looking at data of the last wave of interview (wave 6) and at survey participants aged above 65 years old. The results are reported below in the column \lq\lq non-projected''.\\
+Then, for every single participant in wave 6, we computed a measure of \lq\lq lifetime income'', given by the sum of two terms: the income earned in years of healthy life and the income earned in years of disability, which we discount by a factor $\alpha$. \\
+Below we look at the extreme case with $\alpha \rightarrow \infty$, i.e. assuming that people with disability do not benefit of their retirement earnings.\\
+
+A second important assumption is that we are excluding the existence of \lq\lq income trajectories'', i.e. those cases in which an individual earns different amounts of money during her life courses, thus changing her relative position in the income distribution. \\
+On the one hand, this might be plausible since we are looking at people already retired, or close to retirement age, and those individuals should be less likely to experience sharp increases or decreases in their income.\\
+On the other hand, this is clearly a strong assumption and the results should be interpreted as the hypothetical \lq\lq lifetime income'' of an individual in a given income decile more than as projections of real lifetime values.\\
+This said, this synthetic measure could give us an indication of the degree of inequality in a given society.\\
+
+\newpage
+
+The results presented below show the effect of taking into consideration inequalities in life expectancy. 
+Those countries presenting high inequality in both total and healthy longevity - see for instance Denmark, Switzerland, and Germany - receive a much higher penalty than less unequal nations. This is true independent from the level of inequality at baseline.
+
+
+\begin{table}[H]
+    \centering  \textbf{Gini and Theil index for males}\par\medskip\medskip
+\begin{tabular}{lrrrrrr}
+\midrule
+ &    \multicolumn{2}{c}{\textbf{Theil index}}  & &&   \multicolumn{2}{c}{\textbf{Gini index}}  \\
+Country &  Baseline &  Projected & && Baseline &  Projected \\
+\toprule
+      Austria &           0.13 &       0.14  && &          0.26 &       0.27 \\
+      Belgium &           0.49 &       0.50 &  &  &       0.50 &       0.50 \\
+  Switzerland &           0.22 &       0.25 &  & &        0.36 &       0.39 \\
+      Germany &           0.35 &       0.41 &  &  &       0.34 &       0.36 \\
+     Denmark &           0.14 &       0.16 &   &   &     0.29 &       0.31 \\
+       Spain &           0.19 &       0.20 &  &     &    0.33 &       0.33 \\
+      France &           0.14 &       0.15 &  &      &   0.28 &       0.30 \\
+       Italy &           0.22 &       0.22 &  &       &  0.34 &       0.35 \\
+      Sweden &           0.12 &       0.13 &  &       &  0.27 &       0.28 \\
+\bottomrule
+\end{tabular}
+\captionsetup{justification=centering}
+ \caption{Theil and Gini coefficient for the male population\\ 
+ \textit{Source:} re-produced from EASYSHARE }
+    \label{tab:ginitheil_male}
+\end{table}
+
+
+
+\begin{table}[H]
+    \centering \textbf{Gini and Theil index for females}\par\medskip\medskip
+\begin{tabular}{lrrrrrr}
+\midrule
+ &    \multicolumn{2}{c}{\textbf{Theil index}}  & &&   \multicolumn{2}{c}{\textbf{Gini index}}  \\
+Country &  Baseline &  Projected & && Baseline &  Projected \\
+\toprule
+      Austria &          0.14 &       0.15  && &          0.28 &       0.30  \\
+      Belgium &           0.52 &       0.53  &  &  &        0.51 &       0.52 \\
+  Switzerland &             0.23 &       0.30 &  & &        0.36 &       0.41  \\
+      Germany &           0.15 &       0.17 &  &  &      0.29 &       0.32 \\
+     Denmark &          0.13 &       0.16  &   &   &     0.28 &       0.31 \\
+       Spain &           0.71 &       0.69 &  &     &    0.42 &       0.43  \\
+      France &           0.16 &       0.18 &  &      &   0.31 &       0.33 \\
+       Italy &           0.26 &       0.26 &  &       &   0.37 &       0.38\\
+      Sweden &            0.14 &       0.16  &  &       & 0.29 &       0.31  \\
+\bottomrule
+\end{tabular}
+\captionsetup{justification=centering}
+ \caption{Theil and Gini coefficient for the female population\\ 
+ \textit{Source:} re-produced from EASYSHARE }
+    \label{tab:ginitheil_female}
+\end{table}
+
+
+
+
+
+
+
+\end{document}
